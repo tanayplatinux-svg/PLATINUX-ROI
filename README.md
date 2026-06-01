@@ -1,29 +1,8 @@
 # Platinux — Streamlit Cloud Deployment Guide
 
-## Files in this folder
-
-platinux_deploy/
-├── freelancer_roi.py      ← platinux.net/social  (warm minimal light theme)
-├── agency_roi.py          ← platinux.net/agency  (crisp corporate light theme)
-├── requirements.txt       ← dependencies (auto-installed by Streamlit Cloud)
-├── .streamlit/
-│   └── config.toml        ← light theme config
-└── README.md              ← this file
-
-
 ## Deploy to Streamlit Cloud (free, 5 mins)
 
 ### Step 1 — Push to GitHub
-
-1. Create a new GitHub repo (e.g. `platinux-roi`)
-2. Push this entire folder as the root of the repo:
-
-   git init
-   git add .
-   git commit -m "Initial deploy"
-   git remote add origin https://github.com/YOUR_USERNAME/platinux-roi.git
-   git push -u origin main
-
 
 ### Step 2 — Deploy App 1 (Freelancer)
 
