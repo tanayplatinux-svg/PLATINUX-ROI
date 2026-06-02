@@ -1,9 +1,9 @@
 import streamlit as st
 import plotly.graph_objects as go
 
-# ── 1. GLOBAL PAGE CONFIGURATION & MARGIN CONTROL ─────────────────────────────
+# ── 1. GLOBAL CONFIGURATION & MARGIN CONTROL ──────────────────────────────────
 st.set_page_config(
-    page_title="Platinux Agency - ROI Calculator",
+    page_title="Platinux - Freelancer ROI Calculator",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -170,19 +170,6 @@ st.markdown("""
     color: #0f0f0f;
     transition: background-color 0.4s, border-color 0.4s;
   }
-  
-  @supports (animation-timeline: view()) {
-    .timeline-block {
-      animation: fadeUp both;
-      animation-timeline: view();
-      animation-range: entry 5% cover 30%;
-    }
-    .timeline-block:hover .timeline-icon {
-      border-color: #00c48c;
-      background: #f0fff8;
-      box-shadow: 0 0 0 6px rgba(0,196,140,.12);
-    }
-  }
 
   /* Roadmap Visual Component Cards */
   .plx-step-card {
@@ -312,7 +299,7 @@ st.markdown("""
   .compare-table { background: #fff; border: 1px solid #e8e6e0; border-radius: 16px; overflow: hidden; }
   .compare-header {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     background: #0f0f0f;
     color: #fff;
     padding: 14px 24px;
@@ -321,7 +308,7 @@ st.markdown("""
   }
   .compare-row {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     padding: 14px 24px;
     border-bottom: 1px solid #f0eeea;
     font-size: 14px;
@@ -374,23 +361,23 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ── 2. LANDING PAGE SECTION 1: HERO VIEWWORKSPACE ─────────────────────────────
+# ── 2. HERO SECTION ───────────────────────────────────────────────────────────
 st.markdown("""
 <div class="hero animate-in">
-  <div class="hero-badge animate-up delay-1">⚡ platinux.net/agency - ROI Calculator</div>
-  <h1 class="animate-up delay-1">Stop scaling your sales team.<br>Scale your <span>lead flow.</span></h1>
-  <p class="animate-up delay-2">Platinux tracks founders and enterprises actively requesting custom development, SaaS builds, and design overhauls. Reach high-ticket clients before they post on Upwork.</p>
+  <div class="hero-badge animate-up delay-1">⚡ platinux.net - Freelancer Lead Engine</div>
+  <h1 class="animate-up delay-1">Stop chasing low-ballers.<br>Get high-ticket <span>direct leads.</span></h1>
+  <p class="animate-up delay-2">Platinux tracks founders and small businesses actively looking for software developers, web designers, and SaaS builders across platforms. Send your pitch before anyone else.</p>
 </div>
 """, unsafe_allow_html=True)
 
 
-# ── 3. LANDING PAGE SECTION 2: THE SUCCESS ROADMAP (INTEGRATED) ──────────────
+# ── 3. SIX-STEP ROADMAP SECTION ───────────────────────────────────────────────
 st.markdown('<div class="section">', unsafe_allow_html=True)
 
 st.markdown("""
-<div class="section-label">🗺 Your path to clients</div>
-<div class="section-title">From <em>zero</em> to paid. In 6 steps.</div>
-<div class="section-sub">Here's exactly how Platinux turns a business owner's post into money in your account — and why responding first is everything.</div>
+<div class="section-label">🗺 Your Blueprint</div>
+<div class="section-title">From lead alert to payout.</div>
+<div class="section-sub">See how simple individual lead tracking is. Respond first, stand out, and secure 100% of the project value.</div>
 """, unsafe_allow_html=True)
 
 st.markdown("""
@@ -401,11 +388,11 @@ st.markdown("""
     <div class="timeline-pointer">
       <div class="plx-step-card">
         <div class="plx-step-tag" style="background:#f0fff8; color:#00875a;">🔍 Step 1</div>
-        <div class="plx-step-title">Business owner posts online</div>
-        <div class="plx-step-desc">Somewhere on Reddit, Facebook, LinkedIn or Threads, a real business owner types "looking for a web developer." It goes live publicly.</div>
+        <div class="plx-step-title">Client asks for a dev online</div>
+        <div class="plx-step-desc">A real client posts on tech subreddits or developer networks stating they need a custom platform built.</div>
         <div class="plx-notif">
           <div class="plx-notif-dot"></div>
-          <div class="plx-notif-text"><strong>r/entrepreneur:</strong> "Need someone to build a site for my salon — budget $800, want it done this month."</div>
+          <div class="plx-notif-text"><strong>r/Freelance:</strong> "Looking for full-stack developer to finish an MVP. Budget $2,500."</div>
         </div>
       </div>
     </div>
@@ -416,9 +403,9 @@ st.markdown("""
     <div class="timeline-pointer">
       <div class="plx-step-card">
         <div class="plx-step-tag" style="background:#fff8e6; color:#b45309;">⚡ Step 2</div>
-        <div class="plx-step-title">Platinux detects it instantly</div>
-        <div class="plx-step-desc">Our engine scans 7+ platforms 24/7. The second the post goes live, we capture it, verify it's a real business owner (not spam), and score its intent.</div>
-        <div class="plx-step-detail"><strong>Avg detection time:</strong> under 60 seconds</div>
+        <div class="plx-step-title">Instant AI verification</div>
+        <div class="plx-step-desc">Our bots catch the thread in under a minute, filters out agency noise, and confirms it's a direct client.</div>
+        <div class="plx-step-detail">No scraping delay · verified status checks</div>
       </div>
     </div>
   </div>
@@ -428,11 +415,11 @@ st.markdown("""
     <div class="timeline-pointer">
       <div class="plx-step-card">
         <div class="plx-step-tag" style="background:#f0f9ff; color:#0369a1;">🔔 Step 3</div>
-        <div class="plx-step-title">You get a real-time alert</div>
-        <div class="plx-step-desc">Platinux sends you a direct link to the post the moment it's verified. You see the platform, the post, the budget signal — everything you need to respond.</div>
+        <div class="plx-step-title">Direct ping to you</div>
+        <div class="plx-step-desc">You get a clean notification with a direct link to hop onto the project source immediately.</div>
         <div class="plx-notif">
           <div class="plx-notif-dot"></div>
-          <div class="plx-notif-text"><strong>🔔 New Project Alert</strong> — Salon owner · Reddit · Budget ~$800 · Posted 2 min ago → <strong style="color:#00c48c">View post</strong></div>
+          <div class="plx-notif-text"><strong>🔔 Platinux Feed:</strong> MVP Build · Budget $2.5k · Posted 1 min ago → <strong style="color:#00c48c">Open Thread</strong></div>
         </div>
       </div>
     </div>
@@ -443,9 +430,9 @@ st.markdown("""
     <div class="timeline-pointer">
       <div class="plx-step-card">
         <div class="plx-step-tag" style="background:#fdf0ff; color:#7e22ce;">💬 Step 4</div>
-        <div class="plx-step-title">You reply first</div>
-        <div class="plx-step-desc">You go directly to the post and respond — as a comment, a DM, or a reply. The business owner gets your message before they've even seen 10 other pitches.</div>
-        <div class="plx-step-detail">Freelancers who respond within 1 hour close at <strong>3× the rate</strong> of those who respond later.</div>
+        <div class="plx-step-title">Drop your personalized pitch</div>
+        <div class="plx-step-desc">You contact them directly before hundreds of automated applications flood their job posts on traditional boards.</div>
+        <div class="plx-step-detail">First responders get <strong>80% higher engagement rates</strong>.</div>
       </div>
     </div>
   </div>
@@ -455,9 +442,9 @@ st.markdown("""
     <div class="timeline-pointer">
       <div class="plx-step-card">
         <div class="plx-step-tag" style="background:#fff1f0; color:#b91c1c;">🤝 Step 5</div>
-        <div class="plx-step-title">Discovery call, scope, close</div>
-        <div class="plx-step-desc">You have a conversation with a business owner who already said they need a developer. No cold pitching — they raised their hand first. Agree on scope, timeline, and price.</div>
-        <div class="plx-step-detail">No platform middleman. No bidding wars.<br><strong>You own the client relationship directly.</strong></div>
+        <div class="plx-step-title">Lock down contract details</div>
+        <div class="plx-step-desc">Talk details via DM/Email, negotiate terms, and sign contracts without giving up any platform fees.</div>
+        <div class="plx-step-detail">Keep 100% of your earnings. No platform cut.</div>
       </div>
     </div>
   </div>
@@ -467,11 +454,11 @@ st.markdown("""
     <div class="timeline-pointer">
       <div class="plx-step-card plx-money-card">
         <div class="plx-step-tag" style="background:rgba(0,196,140,.15); color:#00c48c;">💰 Step 6</div>
-        <div class="plx-step-title">Project delivered. Money in.</div>
-        <div class="plx-step-desc">You build, deliver, and get paid. No Upwork commissions eating 20% of your income. No platform owning your client. Just you, the client, and the full project value.</div>
-        <span class="plx-money-amount">+$2,400</span>
-        <div class="plx-money-sub">avg first project from a Platinux lead · directly to you</div>
-        <div class="plx-step-detail" style="margin-top:16px">Platinux cost: <strong>$79/mo</strong>&nbsp;&nbsp;·&nbsp;&nbsp;Your ROI: <strong>30×</strong></div>
+        <div class="plx-step-title">Full payment directly to you</div>
+        <div class="plx-step-desc">Deliver the project and bank the clean profit. No Upwork/Fiverr commissions draining your balance.</div>
+        <span class="plx-money-amount">+$2,500</span>
+        <div class="plx-money-sub">100% net earnings went directly to your bank account</div>
+        <div class="plx-step-detail" style="margin-top:16px">Platinux cost: <strong>$79/mo</strong>&nbsp;&nbsp;·&nbsp;&nbsp;ROI: <strong>31×</strong></div>
       </div>
     </div>
   </div>
@@ -482,47 +469,41 @@ st.markdown("""
 st.markdown('</div>', unsafe_allow_html=True)
 
 
-# ── 4. ECONOMICS & USER DATA MATRIX INTERFACE ─────────────────────────────────
+# ── 4. INDEPENDENT FREELANCER ECONOMICS CALC ─────────────────────────────────
 st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 st.markdown('<div class="section">', unsafe_allow_html=True)
-st.markdown('<div class="section-label">Agency Economics</div>', unsafe_allow_html=True)
-st.markdown('<div class="section-title">Calculate your true net profit</div>', unsafe_allow_html=True)
-st.markdown('<div class="section-sub">Model your agency overhead and see what a single subscription yields.</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-label">Freelancer Economics</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Run your individual numbers</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-sub">See how much net income you retain by shifting away from traditional platforms.</div>', unsafe_allow_html=True)
 
 calc_col_left, calc_col_right = st.columns([1, 1], gap="large")
 
 with calc_col_left:
-    st.markdown("**Your Agency Profile**")
+    st.markdown("**Your Settings**")
 
-    currency = st.selectbox("Your currency", ["USD ($)", "INR (₹)"], key="currency")
+    currency = st.selectbox("Currency Setup", ["USD ($)", "INR (₹)"], key="currency")
     is_inr = currency == "INR (₹)"
     sym = "₹" if is_inr else "$"
     
-    plan_cost = 17999 if is_inr else 199
+    plan_cost = 6999 if is_inr else 79
 
     if is_inr:
-        avg_project = st.slider("Average project size (₹)", 50000, 2000000, 400000, step=50000)
-        sdr_cost = st.slider("Current Outbound/Ad spend per month (₹)", 40000, 800000, 150000, step=20000)
+        avg_project = st.slider("Average deal size (₹)", 10000, 500000, 120000, step=10000)
     else:
-        avg_project = st.slider("Average deal size ($)", 2000, 50000, 8000, step=1000)
-        sdr_cost = st.slider("Current Outbound/Ad spend per month", 500, 10000, 2000, step=500)
+        avg_project = st.slider("Average deal size ($)", 500, 15000, 3500, step=500)
 
-    leads_per_month = st.slider("Leads worked per month", 20, 300, 100, step=10)
-    conversion_rate = st.slider("Close rate (%)", 1, 20, 3, step=1)
-    agency_margin = st.slider("Net Profit Margin (%)", 10, 80, 40, step=5)
+    leads_per_month = st.slider("Leads pitched per month", 10, 150, 40, step=5)
+    conversion_rate = st.slider("Close rate (%)", 1, 20, 5, step=1)
 
 with calc_col_right:
-    st.markdown("**Your Agency Results**")
+    st.markdown("**Your Income Projections**")
 
-    # Math processing engines
-    clients_per_month = leads_per_month * (conversion_rate / 100)
-    monthly_revenue = clients_per_month * avg_project
-    monthly_overhead = monthly_revenue * (1 - (agency_margin / 100))
-    monthly_profit = monthly_revenue - monthly_overhead
-    net_gain = monthly_profit - plan_cost
+    # Freelancer business logic calculations
+    deals_closed = leads_per_month * (conversion_rate / 100)
+    monthly_income = deals_closed * avg_project
+    net_gain = monthly_income - plan_cost
     
-    # Division protection guard
-    roi_x = round((monthly_profit / plan_cost) * 100) if plan_cost > 0 else 0
+    roi_x = round((monthly_income / plan_cost) * 100) if plan_cost > 0 else 0
     annual_profit = net_gain * 12
 
     def fmt(n):
@@ -536,38 +517,36 @@ with calc_col_right:
     st.markdown(f"""
     <div class="metric-row">
       <div class="metric-card highlight">
-        <div class="m-label">Agency ROI</div>
+        <div class="m-label">Subscription ROI</div>
         <div class="m-value">{roi_x:,}%</div>
-        <div class="m-sub">return on {sym}{plan_cost:,}/mo</div>
+        <div class="m-sub">return on {sym}{plan_cost}/mo plan</div>
       </div>
       <div class="metric-card">
-        <div class="m-label">Gross Revenue / Mo</div>
-        <div class="m-value">{fmt(monthly_revenue)}</div>
-        <div class="m-sub">{clients_per_month:.1f} deals closed</div>
+        <div class="m-label">Monthly Retained Income</div>
+        <div class="m-value">{fmt(monthly_income)}</div>
+        <div class="m-sub">{deals_closed:.1f} jobs finished</div>
       </div>
     </div>
     <div class="metric-row">
       <div class="metric-card">
-        <div class="m-label">Net Profit / Mo</div>
-        <div class="m-value">{fmt(monthly_profit)}</div>
-        <div class="m-sub">After {100-agency_margin}% dev overhead</div>
+        <div class="m-label">Net Monthly Profit</div>
+        <div class="m-value">{fmt(net_gain)}</div>
+        <div class="m-sub">After subscription deductions</div>
       </div>
       <div class="metric-card">
-        <div class="m-label">Annual Net Profit</div>
+        <div class="m-label">Annual Extra Revenue</div>
         <div class="m-value">{fmt(annual_profit)}</div>
-        <div class="m-sub">Minus Platinux fees</div>
+        <div class="m-sub">Yearly individual runway</div>
       </div>
     </div>
     """, unsafe_allow_html=True)
 
-    # Protection to safeguard against layout collapse
-    denom = (avg_project * (agency_margin / 100))
-    payback_clients = round(plan_cost / denom, 2) if denom > 0 else 0
-    payback_str = "< 1" if payback_clients < 1 else f"{int(round(payback_clients))}"
+    payback_needed = round(plan_cost / avg_project, 2) if avg_project > 0 else 0
+    payback_str = "< 1" if payback_needed < 1 else f"{int(round(payback_needed))}"
 
     st.markdown(f"""
     <div class="insight-card">
-      <b>Minimal Risk.</b> You only need to close <b>{payback_str} deals</b> to completely cover your monthly Agency subscription from your <i>net profit</i> margin.
+      <b>Break-even Status:</b> You need just <b>{payback_str} client contract</b> to clear the costs of your subscription completely.
     </div>
     """, unsafe_allow_html=True)
 
@@ -578,29 +557,21 @@ st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 st.markdown('<div class="section">', unsafe_allow_html=True)
 
-st.markdown('<div class="section-label">12-Month Projection</div>', unsafe_allow_html=True)
-st.markdown('<div class="section-title">Scaling Profit, Not Headcount</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-label">Performance Breakdown</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Your 12-Month Profit Roadmap</div>', unsafe_allow_html=True)
 
 chart_col1, chart_col2 = st.columns([3, 2], gap="large")
 
 with chart_col1:
     months = list(range(1, 13))
-    # Safe boundary loops to keep scales precise
-    sdr_monthly = [max((monthly_profit * (1 + 0.02*i)) - sdr_cost, 0) for i in range(12)]
-    platinux_monthly = [max((monthly_profit * (1 + 0.05*i)) - plan_cost, 0) for i in range(12)]
+    # Core freelancer path chart arrays
+    platinux_monthly = [max((monthly_income * (1 + 0.04*i)) - plan_cost, 0) for i in range(12)]
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=months, y=[round(v) for v in sdr_monthly],
-        mode='lines+markers',
-        name='Via Ads/Outbound SDR',
-        line=dict(color='#e24b4a', width=2, dash='dot'),
-        marker=dict(size=5),
-    ))
-    fig.add_trace(go.Scatter(
         x=months, y=[round(v) for v in platinux_monthly],
         mode='lines+markers',
-        name='Via Platinux Agency',
+        name='Net Income via Platinux',
         line=dict(color='#00c48c', width=3),
         marker=dict(size=6),
         fill='tozeroy',
@@ -611,76 +582,60 @@ with chart_col1:
         font=dict(family='Inter', size=12, color='#555'),
         legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='left', x=0),
         margin=dict(l=0, r=0, t=30, b=0),
-        xaxis=dict(title='Month', showgrid=False, tickvals=months, ticktext=[f'M{m}' for m in months]),
-        yaxis=dict(title=f'Net Profit ({sym})', showgrid=True, gridcolor='#f0eeea', tickformat=','),
-        height=320
+        xaxis=dict(title='Month Timeline', showgrid=False, tickvals=months, ticktext=[f'M{m}' for m in months]),
+        yaxis=dict(title=f'Net Balance ({sym})', showgrid=True, gridcolor='#f0eeea', tickformat=','),
+        height=300
     )
     st.plotly_chart(fig, use_container_width=True)
 
 with chart_col2:
-    labels = ['Agency Net Profit', f'Dev/Overhead ({(100-agency_margin)}%)', f'Platinux Cost']
-    pie_net_profit = max(monthly_profit - plan_cost, 0)
-    values = [pie_net_profit, max(monthly_overhead, 0), plan_cost]
-    colors = ['#00c48c', '#e8e6e0', '#0f0f0f']
+    labels = ['Take-home Pay', 'Subscription Costs']
+    pie_income = max(monthly_income - plan_cost, 0)
+    values = [pie_income, plan_cost]
+    colors = ['#00c48c', '#0f0f0f']
 
     fig2 = go.Figure(go.Pie(
         labels=labels,
         values=values,
         hole=0.6,
         marker=dict(colors=colors, line=dict(color='#fff', width=2)),
-        textinfo='label+percent',
+        textinfo='percent',
         textfont=dict(size=11),
         hovertemplate='%{label}: %{value:,}<extra></extra>'
     ))
     fig2.update_layout(
-        paper_bgcolor='#ffffff', showlegend=False,
-        margin=dict(l=0, r=0, t=10, b=0), height=320,
-        annotations=[dict(
-            text=f"{fmt(pie_net_profit)}<br><span style='font-size:11px'>true profit</span>",
-            x=0.5, y=0.5, font_size=14, showarrow=False
-        )]
+        paper_bgcolor='#ffffff', showlegend=True,
+        margin=dict(l=0, r=0, t=10, b=0), height=300
     )
     st.plotly_chart(fig2, use_container_width=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
 
-# ── 6. DATA ACQUISITION METRIC MATRIX ─────────────────────────────────────────
+# ── 6. COMPARATIVE VALUE MATRIX ───────────────────────────────────────────────
 st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 st.markdown('<div class="section">', unsafe_allow_html=True)
 
-st.markdown('<div class="section-label">Acquisition Comparison</div>', unsafe_allow_html=True)
-st.markdown('<div class="section-title">Platinux vs Paid Acquisition</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-label">Strategy Evaluation</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Direct Inbound Channels vs Platforms</div>', unsafe_allow_html=True)
 
-sdr_yearly = sdr_cost * 12
-plat_yearly = plan_cost * 12
-
-st.markdown(f"""
+st.markdown("""
 <div class="compare-table">
   <div class="compare-header">
-    <span></span>
-    <span>B2B Ads / Outbound SDR</span>
-    <span>Platinux Agency</span>
+    <span>Feature Check</span>
+    <span>Traditional Freelance Boards</span>
   </div>
   <div class="compare-row">
-    <span class="label">Lead Intent</span>
-    <span class="bad">Cold (Interruptive)</span>
-    <span class="good">Hot (Actively Asking)</span>
+    <span class="label">Platform Commissions</span>
+    <span class="bad">Takes 10% to 20% slice out of your billings</span>
   </div>
   <div class="compare-row">
-    <span class="label">Cost to scale</span>
-    <span class="bad">Higher spend = more leads</span>
-    <span class="good">Unlimited leads (Flat Rate)</span>
+    <span class="label">Bidding System</span>
+    <span class="bad">Forced price-drops against automated global applications</span>
   </div>
   <div class="compare-row">
-    <span class="label">Lead Exclusivity</span>
-    <span class="bad">Bidding against competitors</span>
-    <span class="good">You reach out first</span>
-  </div>
-  <div class="compare-row">
-    <span class="label">Annual Acquisition Cost</span>
-    <span class="bad">{fmt(sdr_yearly)}</span>
-    <span class="good">{fmt(plat_yearly)} flat</span>
+    <span class="label">Client Retention</span>
+    <span class="bad">Strict rules block off-platform direct communications</span>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -688,80 +643,53 @@ st.markdown(f"""
 st.markdown('</div>', unsafe_allow_html=True)
 
 
-# ── 7. PRICING PLANS WORKSPACE ────────────────────────────────────────────────
+# ── 7. SOLO PRICING WORKSPACE ─────────────────────────────────────────────────
 st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 st.markdown('<div class="section">', unsafe_allow_html=True)
 
-st.markdown('<div class="section-label">Agency Plans</div>', unsafe_allow_html=True)
-st.markdown('<div class="section-title">One deal covers the year.</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-label">Plans & Billing</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Simple flat fee. Cancel anytime.</div>', unsafe_allow_html=True)
 
-p1, p2, p3 = st.columns(3, gap="medium")
+col_p1, col_p2 = st.columns([1, 2], gap="medium")
 
-if is_inr:
-    pro_p, agency_p, scale_p = "₹1,999", f"₹{plan_cost:,}", "Custom"
-    agency_yr = "₹160,000/yr"
-else:
-    pro_p, agency_p, scale_p = "$79", f"${plan_cost}", "$499+"
-    agency_yr = "$1,899/yr"
-
-with p1:
+with col_p1:
     st.markdown(f"""
-    <div class="metric-card" style="height:100%;min-height:320px">
-      <div style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Pro (Solo Devs)</div>
-      <div style="font-size:32px;font-weight:700;color:#0f0f0f;margin-bottom:4px">{pro_p}</div>
-      <div style="font-size:13px;color:#aaa;margin-bottom:20px">/ mo</div>
-      <div style="font-size:13px;color:#555;line-height:2">
-        ✓ Unlimited leads<br>
-        ✓ Real-time alerts<br>
-        ✓ 1 User Seat<br>
-        — No team routing<br>
-        — No CRM integrations
-      </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-with p2:
-    st.markdown(f"""
-    <div class="metric-card highlight" style="height:100%;min-height:320px">
-      <div style="font-size:11px;color:#00c48c;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Agency — Built for Teams</div>
-      <div style="font-size:32px;font-weight:700;color:#fff;margin-bottom:4px">{agency_p}</div>
-      <div style="font-size:13px;color:#666;margin-bottom:20px">/ mo · or {agency_yr}</div>
+    <div class="metric-card highlight" style="height:100%;">
+      <div style="font-size:11px;color:#00c48c;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Pro Freelancer</div>
+      <div style="font-size:36px;font-weight:700;color:#fff;margin-bottom:4px">{sym}{plan_cost}</div>
+      <div style="font-size:13px;color:#666;margin-bottom:20px">/ month</div>
       <div style="font-size:13px;color:#ccc;line-height:2">
-        ✓ Everything in Pro<br>
-        ✓ 5 Team Seats (Sales/SDR)<br>
-        ✓ Slack / Discord Routing<br>
-        ✓ HubSpot / Salesforce Sync<br>
-        ✓ API Access
+        ✓ 100% Real-time lead engine access<br>
+        ✓ Instant text alert system<br>
+        ✓ Clean verified job alerts feed<br>
+        ✓ Zero platform commission cuts<br>
+        ✓ Full commercial link redirection
       </div>
     </div>
     """, unsafe_allow_html=True)
 
-with p3:
-    st.markdown(f"""
-    <div class="metric-card" style="height:100%;min-height:320px">
-      <div style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Enterprise Scale</div>
-      <div style="font-size:32px;font-weight:700;color:#0f0f0f;margin-bottom:4px">{scale_p}</div>
-      <div style="font-size:13px;color:#aaa;margin-bottom:20px">/ mo</div>
-      <div style="font-size:13px;color:#555;line-height:2">
-        ✓ Unlimited Team Seats<br>
-        ✓ Custom Data Pipelines<br>
-        ✓ Dedicated Account Rep<br>
-        ✓ Whitelabel Reports
-      </div>
+with col_p2:
+    st.markdown("""
+    <div style="padding: 20px 0px;">
+      <h4 style="margin-bottom:12px; color:#0f0f0f;">Why a fixed monthly sub beats regular bidding:</h4>
+      <p style="font-size:14px; color:#666; line-height:1.6;">
+        Traditional freelance boards treat you like a line-item. They charge you money to buy tokens just to submit proposals, and then take up to 20% of your hard-earned invoice amount when you deliver. 
+        <br><br>
+        Platinux changes this balance. For one simple monthly investment, you get access to the actual target threads before everyone else, establishing a secure direct-to-client pipeline.
+      </p>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
 
-# ── 8. BOTTOM MARKETING CONVERSION CTA ────────────────────────────────────────
+# ── 8. CONVERSION MARKETING CALLOUT ───────────────────────────────────────────
 st.markdown(f"""
 <div class="cta-section">
-  <h2>Feed your sales team.</h2>
-  <p>At {sym}{plan_cost:,}/mo, Platinux is a fraction of the cost of a single SDR.<br>
-     Fill your agency pipeline today.</p>
+  <h2>Secure your independent workflow pipelines.</h2>
+  <p>Start tracking authentic high-intent client interactions without platform restrictions.</p>
   <div style="font-size:14px;color:#666;margin-top:32px">
-    platinux.net/agency · 14-Day Free Trial for Teams
+    platinux.net · Risk Free Subscription Trial Available
   </div>
 </div>
 """, unsafe_allow_html=True)
