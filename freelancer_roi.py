@@ -1,26 +1,32 @@
 import streamlit as st
 import plotly.graph_objects as go
 
+# ── 1. GLOBAL PAGE CONFIGURATION & MARGIN CONTROL ─────────────────────────────
 st.set_page_config(
-    page_title="Platinux — Freelancer ROI Calculator",
+    page_title="Platinux Agency - ROI Calculator",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# ── LIGHT THEME: Warm Minimal (Freelancer) ────────────────────────────────────
+# Custom layout and spacing utilities
 st.markdown("""
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap');
 
-  html, body, [class*="css"] {
-    font-family: 'Inter', sans-serif;
-    background: #faf9f6 !important;
+  html, body, [class*="css"] { 
+    font-family: 'Inter', sans-serif; 
   }
-  .main { background: #faf9f6; }
-  .block-container { padding: 0 !important; max-width: 100% !important; }
+  .main { background: #f8f7f4; }
+  
+  /* FIXED MARGINS: Absolute padding configuration on left and right-hand side of the page */
+  .block-container { 
+    padding-left: 5% !important; 
+    padding-right: 5% !important; 
+    max-width: 90% !important; 
+  }
 
-  /* Global Animations */
+  /* Global Layout Animations */
   @keyframes fadeUp {
     0% { opacity: 0; transform: translateY(40px); }
     100% { opacity: 1; transform: translateY(0); }
@@ -29,193 +35,169 @@ st.markdown("""
     0% { opacity: 0; }
     100% { opacity: 1; }
   }
+  @keyframes pulseHighlight {
+    0% { box-shadow: 0 0 0 0 rgba(0, 196, 140, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(0, 196, 140, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 196, 140, 0); }
+  }
+
   .animate-up { animation: fadeUp 0.6s ease-out forwards; }
   .animate-in { animation: fadeIn 0.8s ease-out forwards; }
   .delay-1 { animation-delay: 0.1s; }
   .delay-2 { animation-delay: 0.2s; }
 
-  /* Hero: light warm, not dark */
+  /* Hero Banner Workspace */
   .hero {
-    background: #faf9f6;
-    border-bottom: 1px solid #e8e4dc;
-    padding: 72px 64px 56px;
+    background: #0f0f0f;
+    color: #fff;
+    padding: 80px 40px 60px;
     text-align: center;
+    border-radius: 24px;
+    margin-top: 24px;
   }
   .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
     border-radius: 100px;
-    padding: 6px 14px;
-    font-size: 12px;
-    font-weight: 500;
-    color: #16a34a;
-    margin-bottom: 28px;
-    letter-spacing: .01em;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 24px;
   }
   .hero h1 {
-    font-size: 48px;
+    font-size: 52px;
     font-weight: 700;
-    line-height: 1.18;
-    color: #111;
-    margin: 0 0 18px;
-    letter-spacing: -1.5px;
+    line-height: 1.15;
+    margin: 0 0 16px;
+    letter-spacing: -1px;
   }
-  .hero h1 span { color: #16a34a; }
+  .hero h1 span { color: #00c48c; }
   .hero p {
-    font-size: 17px;
-    color: #6b6b6b;
-    max-width: 520px;
-    margin: 0 auto;
-    line-height: 1.65;
+    font-size: 18px;
+    color: #999;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
   }
 
-  /* Section */
-  .section { padding: 56px 64px; background: #faf9f6; }
-  .section.alt { background: #f5f3ef; }
-  .sec-eyebrow {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .12em;
+  /* Core Structural Sections */
+  .section { padding: 40px 0px; }
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .1em;
     text-transform: uppercase;
-    color: #16a34a;
-    margin-bottom: 8px;
+    color: #888;
+    margin-bottom: 12px;
   }
-  .sec-title {
-    font-size: 32px;
+  .section-title {
+    font-size: 38px;
     font-weight: 700;
-    color: #111;
+    color: #0f0f0f;
+    margin-bottom: 12px;
     letter-spacing: -.5px;
-    margin-bottom: 6px;
   }
-  .sec-title em {
+  .section-title em {
     font-style: normal;
     background: #b8fce8;
     border-radius: 6px;
     padding: 0 8px;
   }
-  .sec-sub {
-    font-size: 15px;
-    color: #777;
-    margin-bottom: 36px;
+  .section-sub {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 40px;
+    max-width: 650px;
+    line-height: 1.6;
   }
 
-  /* ── Roadmap Section Styling Integration ── */
-  .plx-road-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .plx-timeline {
+  /* Alternating Timeline Center Track Line */
+  .timeline-container {
     position: relative;
-    margin-top: 40px;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px 0;
   }
-  .plx-timeline-track {
+  .timeline-container::after {
+    content: '';
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    width: 2px;
+    background: #e4e4e4;
     top: 0;
     bottom: 0;
-    width: 2px;
-    background: #e8e4dc;
-    overflow: hidden;
+    left: 50%;
+    margin-left: -1px;
+    z-index: 1;
   }
-  .plx-timeline-progress {
+  .timeline-block {
+    position: relative;
+    margin-bottom: 40px;
     width: 100%;
-    background: linear-gradient(to bottom, #16a34a, #16a34a88);
-    height: 0%;
-    transition: height .1s linear;
-  }
-  .plx-step {
-    display: grid;
-    grid-template-columns: 1fr 80px 1fr;
-    align-items: center;
-    margin-bottom: 64px;
-    position: relative;
-    opacity: 0;
-    transition: opacity .6s ease, transform .6s ease;
-  }
-  .plx-step:nth-child(odd) { transform: translateX(-30px); }
-  .plx-step:nth-child(even) { transform: translateX(30px); }
-  .plx-step.visible {
-    opacity: 1;
-    transform: translateX(0) !important;
-  }
-  .plx-step-node {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+    justify-content: flex-start;
     z-index: 2;
   }
-  .plx-node-circle {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    border: 2px solid #e8e4dc;
-    background: #faf9f6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    position: relative;
-    transition: border-color .4s, box-shadow .4s, background .4s;
+  .timeline-block:nth-child(even) {
+    justify-content: flex-end;
   }
-  .plx-step.visible .plx-node-circle {
-    border-color: #16a34a;
-    background: #fff;
-    box-shadow: 0 0 0 6px rgba(22,163,74,.12), 0 0 0 12px rgba(22,163,74,.05);
+  .timeline-pointer {
+    width: 50%;
+    padding-right: 40px;
+    box-sizing: border-box;
   }
-  .plx-node-num {
+  .timeline-block:nth-child(even) .timeline-pointer {
+    padding-right: 0;
+    padding-left: 40px;
+  }
+  
+  .timeline-icon {
     position: absolute;
-    top: -8px;
-    right: -8px;
-    width: 20px;
-    height: 20px;
-    background: #111;
-    color: #fff;
+    width: 40px;
+    height: 40px;
+    left: 50%;
+    top: 24px;
+    margin-left: -20px;
+    background: #fff;
+    border: 2px solid #e4e4e4;
     border-radius: 50%;
-    font-size: 10px;
-    font-weight: 700;
+    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #faf9f6;
+    font-weight: 700;
+    font-size: 14px;
+    color: #0f0f0f;
+    transition: background-color 0.4s, border-color 0.4s;
   }
+  
+  @supports (animation-timeline: view()) {
+    .timeline-block {
+      animation: fadeUp both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 30%;
+    }
+    .timeline-block:hover .timeline-icon {
+      border-color: #00c48c;
+      background: #f0fff8;
+      box-shadow: 0 0 0 6px rgba(0,196,140,.12);
+    }
+  }
+
+  /* Roadmap Visual Component Cards */
   .plx-step-card {
     background: #fff;
-    border: 1.5px solid #e8e4dc;
+    border: 1.5px solid #e4e4e4;
     border-radius: 16px;
     padding: 24px 28px;
-    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.01);
     transition: border-color .3s, box-shadow .3s, transform .3s;
   }
   .plx-step-card:hover {
-    border-color: #16a34a;
-    box-shadow: 0 8px 32px rgba(22,163,74,.12);
+    border-color: #00c48c;
+    box-shadow: 0 8px 32px rgba(0,196,140,.12);
     transform: translateY(-2px);
   }
-  .plx-step-card::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 20px;
-    height: 2px;
-    background: #e8e4dc;
-    transform: translateY(-50%);
-    transition: background .4s;
-  }
-  .plx-step.visible .plx-step-card::after { background: #16a34a; }
-  .plx-step:nth-child(odd) .plx-step-card { grid-column: 1; }
-  .plx-step:nth-child(odd) .plx-step-node { grid-column: 2; }
-  .plx-step:nth-child(odd) .plx-step-empty { grid-column: 3; }
-  .plx-step:nth-child(odd) .plx-step-card::after { right: -22px; }
-  .plx-step:nth-child(even) .plx-step-empty { grid-column: 1; }
-  .plx-step:nth-child(even) .plx-step-node { grid-column: 2; }
-  .plx-step:nth-child(even) .plx-step-card { grid-column: 3; }
-  .plx-step:nth-child(even) .plx-step-card::after { left: -22px; }
-  
   .plx-step-tag {
     display: inline-flex;
     align-items: center;
@@ -226,360 +208,320 @@ st.markdown("""
     text-transform: uppercase;
     padding: 3px 10px;
     border-radius: 100px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
-  .plx-step-title { font-size: 18px; font-weight: 700; color: #111; margin-bottom: 8px; letter-spacing: -.3px; }
-  .plx-step-desc { font-size: 14px; color: #666; line-height: 1.6; }
-  .plx-step-detail { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 13px; color: #888; }
-  .plx-step-detail strong { color: #111; font-weight: 600; }
-  .plx-notif { display: flex; align-items: flex-start; gap: 10px; background: #f5f3ef; border: 1.5px solid #e8e4dc; border-radius: 10px; padding: 10px 12px; margin-top: 14px; }
-  .plx-notif-dot { width: 8px; height: 8px; border-radius: 50%; background: #16a34a; margin-top: 4px; flex-shrink: 0; }
-  .plx-notif-text { font-size: 12px; color: #555; line-height: 1.4; }
+  .plx-step-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0a0a0a;
+    margin-bottom: 8px;
+    letter-spacing: -.3px;
+  }
+  .plx-step-desc {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+  }
+  .plx-step-detail {
+    margin-top: 14px;
+    font-size: 13px;
+    color: #888;
+    line-height: 1.5;
+  }
+  .plx-step-detail strong {
+    color: #0a0a0a;
+    font-weight: 600;
+  }
+
+  .plx-notif {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #f7f7f5;
+    border: 1.5px solid #e4e4e4;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-top: 14px;
+  }
+  .plx-notif-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #00c48c;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+  .plx-notif-text {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.4;
+  }
   .plx-notif-text strong { color: #000; }
 
-  /* VIP Premium Money Card */
-  .plx-money-card { background: #111; border: 1.5px solid #16a34a; position: relative; overflow: hidden; }
+  /* Highlight Premium Milestone Step 6 Callout Card */
+  .plx-money-card {
+    background: #0a0a0a;
+    border: 1.5px solid #00c48c;
+    position: relative;
+    overflow: hidden;
+  }
   .plx-money-card::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse at top left, rgba(22,163,74,.2) 0%, transparent 60%);
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top left, rgba(0,196,140,.2) 0%, transparent 60%);
   }
   .plx-money-card .plx-step-title { color: #fff; }
-  .plx-money-card .plx-step-desc { color: #aaa; }
-  .plx-money-card .plx-step-detail { color: #777; }
-  .plx-money-card .plx-step-detail strong { color: #16a34a; }
-  .plx-money-amount { font-size: 36px; font-weight: 700; color: #16a34a; letter-spacing: -1px; margin-top: 12px; display: block; }
+  .plx-money-card .plx-step-desc { color: #888; }
+  .plx-money-card .plx-step-detail { color: #666; }
+  .plx-money-card .plx-step-detail strong { color: #00c48c; }
+  .plx-money-amount {
+    font-size: 36px;
+    font-weight: 700;
+    color: #00c48c;
+    letter-spacing: -1px;
+    margin-top: 12px;
+    display: block;
+  }
   .plx-money-sub { font-size: 12px; color: #555; margin-top: 2px; }
 
-  .plx-road-cta { text-align: center; margin-top: 80px; opacity: 0; transform: translateY(30px); transition: opacity .6s .2s, transform .6s .2s; }
-  .plx-road-cta.visible { opacity: 1; transform: translateY(0); }
-  .plx-road-cta-title { font-size: 32px; font-weight: 700; color: #111; letter-spacing: -1px; margin-bottom: 8px; }
-  .plx-road-cta-sub { font-size: 16px; color: #888; margin-bottom: 28px; }
-  .plx-road-cta-btn {
-    display: inline-flex; align-items: center; gap: 8px; background: #111; color: #fff; font-size: 15px; font-weight: 600;
-    padding: 14px 28px; border-radius: 100px; text-decoration: none; border: none; cursor: pointer; transition: background .2s, transform .2s;
-    font-family: 'DM Sans', sans-serif;
+  /* Dashboard Core Metric Blocks */
+  .metric-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+  .metric-card {
+    flex: 1;
+    min-width: 140px;
+    background: #fff;
+    border: 1px solid #e8e6e0;
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s ease;
   }
-  .plx-road-cta-btn:hover { background: #16a34a; color: #fff; transform: translateY(-2px); }
-
-  /* Metric cards */
-  .m-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
-  .mc {
-    flex: 1; min-width: 130px; background: #fff; border: 1px solid #e8e4dc; border-radius: 10px; padding: 18px 20px;
-    transition: box-shadow .15s;
+  .metric-card:hover { transform: translateY(-3px); }
+  .metric-card .m-label { font-size: 12px; color: #888; margin-bottom: 6px; }
+  .metric-card .m-value { font-size: 28px; font-weight: 700; color: #0f0f0f; }
+  .metric-card .m-sub { font-size: 12px; color: #aaa; margin-top: 4px; }
+  .metric-card.highlight { 
+    background: #0f0f0f; 
+    border-color: #0f0f0f; 
+    animation: pulseHighlight 2s infinite; 
   }
-  .mc:hover { box-shadow: 0 2px 12px rgba(0,0,0,.06); }
-  .mc .lbl { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #aaa; margin-bottom: 6px; }
-  .mc .val { font-size: 26px; font-weight: 700; color: #111; }
-  .mc .sub { font-size: 12px; color: #bbb; margin-top: 3px; }
-  .mc.star { background: #f0fdf4; border: 1.5px solid #86efac; }
-  .mc.star .lbl { color: #16a34a; }
-  .mc.star .val { color: #15803d; font-size: 30px; }
-  .mc.star .sub { color: #4ade80; }
+  .metric-card.highlight .m-label { color: #888; }
+  .metric-card.highlight .m-value { color: #00c48c; }
+  .metric-card.highlight .m-sub { color: #666; }
 
-  /* Insight card */
-  .note {
-    background: #fff; border: 1px solid #e8e4dc; border-left: 3px solid #16a34a; border-radius: 0 8px 8px 0;
-    padding: 14px 18px; font-size: 13px; color: #555; line-height: 1.65; margin-bottom: 10px;
+  /* Comparative Analytics Grid */
+  .compare-table { background: #fff; border: 1px solid #e8e6e0; border-radius: 16px; overflow: hidden; }
+  .compare-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    background: #0f0f0f;
+    color: #fff;
+    padding: 14px 24px;
+    font-size: 13px;
+    font-weight: 600;
   }
-  .note b { color: #111; font-weight: 600; }
-
-  /* Compare table */
-  .ctable { background: #fff; border: 1px solid #e8e4dc; border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
-  .chead {
-    display: grid; grid-template-columns: 2fr 1fr 1fr; background: #f5f3ef; padding: 12px 22px;
-    font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #555;
+  .compare-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    padding: 14px 24px;
+    border-bottom: 1px solid #f0eeea;
+    font-size: 14px;
+    align-items: center;
   }
-  .crow { display: grid; grid-template-columns: 2fr 1fr 1fr; padding: 13px 22px; border-bottom: 1px solid #f5f3ef; font-size: 13px; align-items: center; }
-  .crow:last-child { border-bottom: none; }
-  .crow .lbl { color: #666; }
-  .crow .bad { color: #dc2626; font-weight: 500; }
-  .crow .good { color: #16a34a; font-weight: 500; }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row .label { color: #555; }
+  .compare-row .bad { color: #e24b4a; font-weight: 500; }
+  .compare-row .good { color: #16a34a; font-weight: 500; }
 
-  /* Pricing */
-  .pcard { background: #fff; border: 1px solid #e8e4dc; border-radius: 12px; padding: 24px; height: 100%; min-height: 300px; }
-  .pcard.best { background: #f0fdf4; border: 1.5px solid #86efac; }
-  .pcard .ptag { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #aaa; margin-bottom: 10px; }
-  .pcard.best .ptag { color: #16a34a; }
-  .pcard .pprice { font-size: 34px; font-weight: 700; color: #111; margin-bottom: 2px; }
-  .pcard.best .pprice { color: #15803d; }
-  .pcard .psub { font-size: 12px; color: #aaa; margin-bottom: 18px; }
-  .pcard .pfeat { font-size: 13px; color: #555; line-height: 2.1; }
-  .pcard.best .pfeat { color: #333; }
+  .insight-card {
+    background: #fff;
+    border: 1px solid #e8e6e0;
+    border-left: 3px solid #00c48c;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #444;
+    line-height: 1.6;
+  }
+  .insight-card b { color: #0f0f0f; font-weight: 600; }
 
-  /* CTA */
-  .cta { background: #111; padding: 72px 64px; text-align: center; }
-  .cta h2 { font-size: 38px; font-weight: 700; color: #fff; letter-spacing: -.5px; margin-bottom: 14px; }
-  .cta p { font-size: 17px; color: #666; margin-bottom: 0; }
-  .cta em { font-style: normal; color: #4ade80; }
+  .cta-section {
+    background: #0f0f0f;
+    color: #fff;
+    padding: 80px 60px;
+    text-align: center;
+    border-radius: 24px;
+    margin-bottom: 40px;
+  }
+  .cta-section h2 { font-size: 40px; font-weight: 700; margin-bottom: 16px; letter-spacing: -.5px; }
+  .cta-section p { font-size: 18px; color: #888; margin-bottom: 40px; }
 
-  .divider { height: 1px; background: #e8e4dc; margin: 40px 0px; }
+  .divider { height: 1px; background: #e8e6e0; margin: 40px 0px; }
 
-  /* Mobile Responsive Timeline Track Rules */
+  /* RESPONSIVE MOBILE COMPRESSION ADJUSTMENTS */
   @media (max-width: 768px) {
-    .plx-timeline-track { left: 28px; transform: none; }
-    .plx-step { grid-template-columns: 56px 1fr !important; grid-template-rows: auto; margin-bottom: 45px; }
-    .plx-step:nth-child(odd) .plx-step-node,
-    .plx-step:nth-child(even) .plx-step-node { grid-column: 1; grid-row: 1; justify-content: flex-start; }
-    .plx-step:nth-child(odd) .plx-step-card,
-    .plx-step:nth-child(even) .plx-step-card { grid-column: 2; grid-row: 1; }
-    .plx-step:nth-child(odd) .plx-step-empty,
-    .plx-step:nth-child(even) .plx-step-empty { display: none; }
-    .plx-step:nth-child(odd) .plx-step-card::after,
-    .plx-step:nth-child(even) .plx-step-card::after { left: -22px; right: auto; }
+    .timeline-container::after { left: 20px; }
+    .timeline-block { justify-content: flex-start !important; }
+    .timeline-pointer { width: 100% !important; padding-left: 50px !important; padding-right: 0 !important; }
+    .timeline-icon { left: 20px !important; margin-left: -20px !important; }
   }
 
-  /* Hide Streamlit chrome */
-  #MainMenu, footer, header { visibility: hidden; }
-  [data-testid="stDecoration"] { display: none; }
+  /* Framework Cleanup Elements */
+  #MainMenu { visibility: hidden; }
+  footer { visibility: hidden; }
+  header { visibility: hidden; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── HERO SECTION ──────────────────────────────────────────────────────────────
+
+# ── 2. LANDING PAGE SECTION 1: HERO VIEWWORKSPACE ─────────────────────────────
 st.markdown("""
 <div class="hero animate-in">
-  <div class="hero-badge animate-up delay-1">⚡ platinux.net/freelance - ROI Calculator</div>
+  <div class="hero-badge animate-up delay-1">⚡ platinux.net/agency - ROI Calculator</div>
   <h1 class="animate-up delay-1">Stop scaling your sales team.<br>Scale your <span>lead flow.</span></h1>
   <p class="animate-up delay-2">Platinux tracks founders and enterprises actively requesting custom development, SaaS builds, and design overhauls. Reach high-ticket clients before they post on Upwork.</p>
 </div>
 """, unsafe_allow_html=True)
 
 
-# ── HIGH PERFORMANCE INJECTED ROADMAP COMPONENT ──────────────────────────────
+# ── 3. LANDING PAGE SECTION 2: THE SUCCESS ROADMAP (INTEGRATED) ──────────────
+st.markdown('<div class="section">', unsafe_allow_html=True)
+
 st.markdown("""
-<section class="section alt" style="padding-top:80px; padding-bottom:100px;">
-  <div class="plx-road-inner">
-    
-    <!-- Header -->
-    <div style="max-width: 560px; margin-bottom: 60px;">
-      <div class="sec-eyebrow">🗺 Your path to clients</div>
-      <h2 class="sec-title">From <em>zero</em> to paid. In 6 steps.</h2>
-      <p class="sec-sub" style="margin-bottom:0;">
-        Here's exactly how Platinux turns a business owner's post into money in your account — and why responding first is everything.
-      </p>
-    </div>
-
-    <!-- Timeline Track Container -->
-    <div class="plx-timeline" id="plx-timeline">
-      <div class="plx-timeline-track">
-        <div class="plx-timeline-progress" id="plx-track-fill"></div>
-      </div>
-
-      <!-- STEP 1 -->
-      <div class="plx-step" data-step="1">
-        <div class="plx-step-card">
-          <div class="plx-step-tag" style="background:#f0fff8; color:#00875a;">🔍 Step 1</div>
-          <div class="plx-step-title">Business owner posts online</div>
-          <div class="plx-step-desc">
-            Somewhere on Reddit, Facebook, LinkedIn or Threads, a real business owner types "looking for a web developer." It goes live publicly.
-          </div>
-          <div class="plx-notif">
-            <div class="plx-notif-dot"></div>
-            <div class="plx-notif-text">
-              <strong>r/entrepreneur:</strong> "Need someone to build a site for my salon — budget $800, want it done this month."
-            </div>
-          </div>
-        </div>
-        <div class="plx-step-node">
-          <div class="plx-node-circle">📝<div class="plx-node-num">1</div></div>
-        </div>
-        <div class="plx-step-empty"></div>
-      </div>
-
-      <!-- STEP 2 -->
-      <div class="plx-step" data-step="2">
-        <div class="plx-step-empty"></div>
-        <div class="plx-step-node">
-          <div class="plx-node-circle">⚡<div class="plx-node-num">2</div></div>
-        </div>
-        <div class="plx-step-card">
-          <div class="plx-step-tag" style="background:#fff8e6; color:#b45309;">⚡ Step 2</div>
-          <div class="plx-step-title">Platinux detects it instantly</div>
-          <div class="plx-step-desc">
-            Our engine scans 7+ platforms 24/7. The second the post goes live, we capture it, verify it's a real business owner (not spam), and score its intent.
-          </div>
-          <div class="plx-step-detail">
-            <strong>Avg detection time:</strong> under 60 seconds
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 3 -->
-      <div class="plx-step" data-step="3">
-        <div class="plx-step-card">
-          <div class="plx-step-tag" style="background:#f0f9ff; color:#0369a1;">🔔 Step 3</div>
-          <div class="plx-step-title">You get a real-time alert</div>
-          <div class="plx-step-desc">
-            Platinux sends you a direct link to the post the moment it's verified. You see the platform, the post, the budget signal — everything you need to respond.
-          </div>
-          <div class="plx-notif">
-            <div class="plx-notif-dot"></div>
-            <div class="plx-notif-text">
-              <strong>🔔 New Project Alert</strong> — Salon owner · Reddit · Budget ~$800 · Posted 2 min ago
-            </div>
-          </div>
-        </div>
-        <div class="plx-step-node">
-          <div class="plx-node-circle">🔔<div class="plx-node-num">3</div></div>
-        </div>
-        <div class="plx-step-empty"></div>
-      </div>
-
-      <!-- STEP 4 -->
-      <div class="plx-step" data-step="4">
-        <div class="plx-step-empty"></div>
-        <div class="plx-step-node">
-          <div class="plx-node-circle">💬<div class="plx-node-num">4</div></div>
-        </div>
-        <div class="plx-step-card">
-          <div class="plx-step-tag" style="background:#fdf0ff; color:#7e22ce;">💬 Step 4</div>
-          <div class="plx-step-title">You reply first</div>
-          <div class="plx-step-desc">
-            You go directly to the post and respond — as a comment, a DM, or a reply. The business owner gets your message before they've even seen 10 other pitches.
-          </div>
-          <div class="plx-step-detail">
-            Freelancers who respond within 1 hour close at <strong>3× the rate</strong> of those who respond later.
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 5 -->
-      <div class="plx-step" data-step="5">
-        <div class="plx-step-card">
-          <div class="plx-step-tag" style="background:#fff1f0; color:#b91c1c;">🤝 Step 5</div>
-          <div class="plx-step-title">Discovery call, scope, close</div>
-          <div class="plx-step-desc">
-            You have a conversation with a business owner who already said they need a developer. No cold pitching — they raised their hand first. Agree on scope, timeline, and price.
-          </div>
-          <div class="plx-step-detail">
-            No platform middleman. No bidding wars.<br><strong>You own the client relationship directly.</strong>
-          </div>
-        </div>
-        <div class="plx-step-node">
-          <div class="plx-node-circle">🤝<div class="plx-node-num">5</div></div>
-        </div>
-        <div class="plx-step-empty"></div>
-      </div>
-
-      <!-- STEP 6 -->
-      <div class="plx-step" data-step="6">
-        <div class="plx-step-empty"></div>
-        <div class="plx-step-node">
-          <div class="plx-node-circle" style="font-size:26px;">💰<div class="plx-node-num" style="background:#16a34a; color:#fff">6</div></div>
-        </div>
-        <div class="plx-step-card plx-money-card">
-          <div class="plx-step-tag" style="background:rgba(22,163,74,.2); color:#4ade80;">💰 Step 6</div>
-          <div class="plx-step-title">Project delivered. Money in.</div>
-          <div class="plx-step-desc">
-            You build, deliver, and get paid. No Upwork commissions eating 20% of your income. No platform owning your client. Just you, the client, and the full project value.
-          </div>
-          <span class="plx-money-amount">+$2,400</span>
-          <div class="plx-money-sub">avg first project from a Platinux lead · directly to you</div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Interactive Roadmap CTA Button Entry -->
-    <div class="plx-road-cta" id="plx-road-cta">
-      <div class="plx-road-cta-title">Ready to start Step 1?</div>
-      <div class="plx-road-cta-sub">Your next client posted today. Get the alert before anyone else does.</div>
-      <button class="plx-road-cta-btn">Start Finding Clients →</button>
-    </div>
-
-  </div>
-</section>
-
-<script>
-(function() {
-  var stepObs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) { e.target.classList.add('visible'); }
-    });
-  }, { threshold: 0.15 });
-
-  document.querySelectorAll('.plx-step').forEach(function(el) {
-    stepObs.observe(el);
-  });
-
-  var ctaObs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) e.target.classList.add('visible');
-    });
-  }, { threshold: 0.15 });
-
-  var cta = document.getElementById('plx-road-cta');
-  if (cta) ctaObs.observe(cta);
-
-  var timeline = document.getElementById('plx-timeline');
-  var fill = document.getElementById('plx-track-fill');
-
-  if (timeline && fill) {
-    window.addEventListener('scroll', function() {
-      var rect = timeline.getBoundingClientRect();
-      var total = rect.height;
-      var seen = Math.max(0, -rect.top + window.innerHeight * 0.6);
-      var pct = Math.min(100, (seen / total) * 100);
-      fill.style.height = pct + '%';
-    }, { passive: true });
-  }
-
-  var notifs = [
-    '"Need a web developer for my restaurant — budget $1,200"',
-    '"Looking for someone to build my portfolio site asap"',
-    '"Small biz owner, need ecommerce site, ready to pay"',
-    '"Urgent: need landing page for product launch next week"'
-  ];
-  var notifEls = document.querySelectorAll('.plx-notif-text');
-  if (notifEls.length > 0) {
-    var idx = 0;
-    setInterval(function() {
-      idx = (idx + 1) % notifs.length;
-      notifEls[0].innerHTML = '<strong>Live post:</strong> ' + notifs[idx];
-    }, 3500);
-  }
-})();
-</script>
+<div class="section-label">🗺 Your path to clients</div>
+<div class="section-title">From <em>zero</em> to paid. In 6 steps.</div>
+<div class="section-sub">Here's exactly how Platinux turns a business owner's post into money in your account — and why responding first is everything.</div>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<div class="timeline-container">
 
-# ── ROI CALCULATOR SECTION ────────────────────────────────────────────────────
+  <div class="timeline-block">
+    <div class="timeline-icon">1</div>
+    <div class="timeline-pointer">
+      <div class="plx-step-card">
+        <div class="plx-step-tag" style="background:#f0fff8; color:#00875a;">🔍 Step 1</div>
+        <div class="plx-step-title">Business owner posts online</div>
+        <div class="plx-step-desc">Somewhere on Reddit, Facebook, LinkedIn or Threads, a real business owner types "looking for a web developer." It goes live publicly.</div>
+        <div class="plx-notif">
+          <div class="plx-notif-dot"></div>
+          <div class="plx-notif-text"><strong>r/entrepreneur:</strong> "Need someone to build a site for my salon — budget $800, want it done this month."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-block">
+    <div class="timeline-icon">2</div>
+    <div class="timeline-pointer">
+      <div class="plx-step-card">
+        <div class="plx-step-tag" style="background:#fff8e6; color:#b45309;">⚡ Step 2</div>
+        <div class="plx-step-title">Platinux detects it instantly</div>
+        <div class="plx-step-desc">Our engine scans 7+ platforms 24/7. The second the post goes live, we capture it, verify it's a real business owner (not spam), and score its intent.</div>
+        <div class="plx-step-detail"><strong>Avg detection time:</strong> under 60 seconds</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-block">
+    <div class="timeline-icon">3</div>
+    <div class="timeline-pointer">
+      <div class="plx-step-card">
+        <div class="plx-step-tag" style="background:#f0f9ff; color:#0369a1;">🔔 Step 3</div>
+        <div class="plx-step-title">You get a real-time alert</div>
+        <div class="plx-step-desc">Platinux sends you a direct link to the post the moment it's verified. You see the platform, the post, the budget signal — everything you need to respond.</div>
+        <div class="plx-notif">
+          <div class="plx-notif-dot"></div>
+          <div class="plx-notif-text"><strong>🔔 New Project Alert</strong> — Salon owner · Reddit · Budget ~$800 · Posted 2 min ago → <strong style="color:#00c48c">View post</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-block">
+    <div class="timeline-icon">4</div>
+    <div class="timeline-pointer">
+      <div class="plx-step-card">
+        <div class="plx-step-tag" style="background:#fdf0ff; color:#7e22ce;">💬 Step 4</div>
+        <div class="plx-step-title">You reply first</div>
+        <div class="plx-step-desc">You go directly to the post and respond — as a comment, a DM, or a reply. The business owner gets your message before they've even seen 10 other pitches.</div>
+        <div class="plx-step-detail">Freelancers who respond within 1 hour close at <strong>3× the rate</strong> of those who respond later.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-block">
+    <div class="timeline-icon">5</div>
+    <div class="timeline-pointer">
+      <div class="plx-step-card">
+        <div class="plx-step-tag" style="background:#fff1f0; color:#b91c1c;">🤝 Step 5</div>
+        <div class="plx-step-title">Discovery call, scope, close</div>
+        <div class="plx-step-desc">You have a conversation with a business owner who already said they need a developer. No cold pitching — they raised their hand first. Agree on scope, timeline, and price.</div>
+        <div class="plx-step-detail">No platform middleman. No bidding wars.<br><strong>You own the client relationship directly.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-block">
+    <div class="timeline-icon" style="border-color:#00c48c; background:#0f0f0f; color:#fff;">6</div>
+    <div class="timeline-pointer">
+      <div class="plx-step-card plx-money-card">
+        <div class="plx-step-tag" style="background:rgba(0,196,140,.15); color:#00c48c;">💰 Step 6</div>
+        <div class="plx-step-title">Project delivered. Money in.</div>
+        <div class="plx-step-desc">You build, deliver, and get paid. No Upwork commissions eating 20% of your income. No platform owning your client. Just you, the client, and the full project value.</div>
+        <span class="plx-money-amount">+$2,400</span>
+        <div class="plx-money-sub">avg first project from a Platinux lead · directly to you</div>
+        <div class="plx-step-detail" style="margin-top:16px">Platinux cost: <strong>$79/mo</strong>&nbsp;&nbsp;·&nbsp;&nbsp;Your ROI: <strong>30×</strong></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+
+# ── 4. ECONOMICS & USER DATA MATRIX INTERFACE ─────────────────────────────────
+st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 st.markdown('<div class="section">', unsafe_allow_html=True)
-st.markdown('<div class="sec-eyebrow">Freelance Economics</div>', unsafe_allow_html=True)
-st.markdown('<div class="sec-title">Calculate your true net profit</div>', unsafe_allow_html=True)
-st.markdown('<div class="sec-sub">Model your business overhead and see what a single subscription yields.</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-label">Agency Economics</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Calculate your true net profit</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-sub">Model your agency overhead and see what a single subscription yields.</div>', unsafe_allow_html=True)
 
 calc_col_left, calc_col_right = st.columns([1, 1], gap="large")
 
 with calc_col_left:
-    st.markdown("**Your Profile**")
+    st.markdown("**Your Agency Profile**")
 
     currency = st.selectbox("Your currency", ["USD ($)", "INR (₹)"], key="currency")
     is_inr = currency == "INR (₹)"
     sym = "₹" if is_inr else "$"
     
-    plan_cost = 1999 if is_inr else 79
+    plan_cost = 17999 if is_inr else 199
 
     if is_inr:
-        avg_project = st.slider("Average project size (₹)", 10000, 500000, 80000, step=5000)
-        leads_per_month = st.slider("Platinux Leads worked per month", 10, 150, 40, step=5)
-        conversion_rate = st.slider("Close rate (%)", 1, 20, 5, step=1)
-        freelancer_margin = st.slider("Take-home Profit Margin (%)", 30, 100, 85, step=5)
-        marketing_cost = st.slider("Current platforms/Ad spend per month (₹)", 0, 50000, 5000, step=1000)
+        avg_project = st.slider("Average project size (₹)", 50000, 2000000, 400000, step=50000)
+        sdr_cost = st.slider("Current Outbound/Ad spend per month (₹)", 40000, 800000, 150000, step=20000)
     else:
-        avg_project = st.slider("Average deal size ($)", 500, 15000, 2500, step=250)
-        leads_per_month = st.slider("Platinux Leads worked per month", 10, 150, 40, step=5)
-        conversion_rate = st.slider("Close rate (%)", 1, 20, 5, step=1)
-        freelancer_margin = st.slider("Take-home Profit Margin (%)", 30, 100, 85, step=5)
-        marketing_cost = st.slider("Current platforms/Ad spend per month ($)", 0, 1000, 150, step=25)
+        avg_project = st.slider("Average deal size ($)", 2000, 50000, 8000, step=1000)
+        sdr_cost = st.slider("Current Outbound/Ad spend per month", 500, 10000, 2000, step=500)
+
+    leads_per_month = st.slider("Leads worked per month", 20, 300, 100, step=10)
+    conversion_rate = st.slider("Close rate (%)", 1, 20, 3, step=1)
+    agency_margin = st.slider("Net Profit Margin (%)", 10, 80, 40, step=5)
 
 with calc_col_right:
-    st.markdown("**Your Results**")
+    st.markdown("**Your Agency Results**")
 
+    # Math processing engines
     clients_per_month = leads_per_month * (conversion_rate / 100)
     monthly_revenue = clients_per_month * avg_project
-    monthly_overhead = monthly_revenue * (1 - (freelancer_margin / 100))
+    monthly_overhead = monthly_revenue * (1 - (agency_margin / 100))
     monthly_profit = monthly_revenue - monthly_overhead
     net_gain = monthly_profit - plan_cost
+    
+    # Division protection guard
     roi_x = round((monthly_profit / plan_cost) * 100) if plan_cost > 0 else 0
     annual_profit = net_gain * 12
 
@@ -592,103 +534,109 @@ with calc_col_right:
             return f"${int(round(n)):,}"
 
     st.markdown(f"""
-    <div class="m-row">
-      <div class="mc star">
-        <div class="lbl">Freelancer ROI</div>
-        <div class="val">{roi_x:,}%</div>
-        <div class="sub">return on {sym}{plan_cost:,}/mo</div>
+    <div class="metric-row">
+      <div class="metric-card highlight">
+        <div class="m-label">Agency ROI</div>
+        <div class="m-value">{roi_x:,}%</div>
+        <div class="m-sub">return on {sym}{plan_cost:,}/mo</div>
       </div>
-      <div class="mc">
-        <div class="lbl">Gross Revenue / Mo</div>
-        <div class="val">{fmt(monthly_revenue)}</div>
-        <div class="sub">{clients_per_month:.1f} deals closed</div>
+      <div class="metric-card">
+        <div class="m-label">Gross Revenue / Mo</div>
+        <div class="m-value">{fmt(monthly_revenue)}</div>
+        <div class="m-sub">{clients_per_month:.1f} deals closed</div>
       </div>
     </div>
-    <div class="m-row">
-      <div class="mc">
-        <div class="lbl">Net Take-Home / Mo</div>
-        <div class="val">{fmt(monthly_profit)}</div>
-        <div class="sub">At {freelancer_margin}% pocket margin</div>
+    <div class="metric-row">
+      <div class="metric-card">
+        <div class="m-label">Net Profit / Mo</div>
+        <div class="m-value">{fmt(monthly_profit)}</div>
+        <div class="m-sub">After {100-agency_margin}% dev overhead</div>
       </div>
-      <div class="mc">
-        <div class="lbl">Annual Revenue</div>
-        <div class="val">{fmt(annual_profit)}</div>
-        <div class="sub">Net of Platinux fees</div>
+      <div class="metric-card">
+        <div class="m-label">Annual Net Profit</div>
+        <div class="m-value">{fmt(annual_profit)}</div>
+        <div class="m-sub">Minus Platinux fees</div>
       </div>
     </div>
     """, unsafe_allow_html=True)
 
-    payback_clients = round(plan_cost / (avg_project * (freelancer_margin / 100)), 2)
+    # Protection to safeguard against layout collapse
+    denom = (avg_project * (agency_margin / 100))
+    payback_clients = round(plan_cost / denom, 2) if denom > 0 else 0
+    payback_str = "< 1" if payback_clients < 1 else f"{int(round(payback_clients))}"
+
     st.markdown(f"""
-    <div class="note">
-      <b>Minimal Risk.</b> You only need to close <b>{payback_clients if payback_clients > 1 else "< 1"} projects</b> to completely cover your monthly subscription from your direct cash earnings margin.
+    <div class="insight-card">
+      <b>Minimal Risk.</b> You only need to close <b>{payback_str} deals</b> to completely cover your monthly Agency subscription from your <i>net profit</i> margin.
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
 
-# ── CHART VISUALIZATIONS SECTION ──────────────────────────────────────────────
+# ── 5. GRAPH VISUALIZATIONS SECTION ───────────────────────────────────────────
 st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 st.markdown('<div class="section">', unsafe_allow_html=True)
 
-st.markdown('<div class="sec-eyebrow">12-Month Projection</div>', unsafe_allow_html=True)
-st.markdown('<div class="sec-title">Scaling Profit, Not Overhead</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-label">12-Month Projection</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Scaling Profit, Not Headcount</div>', unsafe_allow_html=True)
 
 chart_col1, chart_col2 = st.columns([3, 2], gap="large")
 
 with chart_col1:
     months = list(range(1, 13))
-    organic_monthly = [(monthly_profit * (1 + 0.01*i)) - marketing_cost for i in range(12)]
-    platinux_monthly = [(monthly_profit * (1 + 0.04*i)) - plan_cost for i in range(12)]
+    # Safe boundary loops to keep scales precise
+    sdr_monthly = [max((monthly_profit * (1 + 0.02*i)) - sdr_cost, 0) for i in range(12)]
+    platinux_monthly = [max((monthly_profit * (1 + 0.05*i)) - plan_cost, 0) for i in range(12)]
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=months, y=[round(max(v,0)) for v in organic_monthly],
+        x=months, y=[round(v) for v in sdr_monthly],
         mode='lines+markers',
-        name='Traditional Freelance Platforms',
-        line=dict(color='#dc2626', width=2, dash='dot'),
+        name='Via Ads/Outbound SDR',
+        line=dict(color='#e24b4a', width=2, dash='dot'),
         marker=dict(size=5),
     ))
     fig.add_trace(go.Scatter(
         x=months, y=[round(v) for v in platinux_monthly],
         mode='lines+markers',
-        name='Via Platinux Tracker',
-        line=dict(color='#16a34a', width=3),
+        name='Via Platinux Agency',
+        line=dict(color='#00c48c', width=3),
         marker=dict(size=6),
         fill='tozeroy',
-        fillcolor='rgba(22,163,74,0.04)'
+        fillcolor='rgba(0,196,140,0.06)'
     ))
     fig.update_layout(
-        paper_bgcolor='#faf9f6', plot_bgcolor='#faf9f6',
+        paper_bgcolor='#ffffff', plot_bgcolor='#ffffff',
         font=dict(family='Inter', size=12, color='#555'),
         legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='left', x=0),
         margin=dict(l=0, r=0, t=30, b=0),
         xaxis=dict(title='Month', showgrid=False, tickvals=months, ticktext=[f'M{m}' for m in months]),
-        yaxis=dict(title=f'Net Income ({sym})', showgrid=True, gridcolor='#e8e4dc', tickformat=','),
+        yaxis=dict(title=f'Net Profit ({sym})', showgrid=True, gridcolor='#f0eeea', tickformat=','),
         height=320
     )
     st.plotly_chart(fig, use_container_width=True)
 
 with chart_col2:
-    labels = ['Take-Home Profit', f'Expenses ({(100-freelancer_margin)}%)', 'Platinux Subscription']
-    values = [monthly_profit - plan_cost, monthly_overhead, plan_cost]
-    colors = ['#16a34a', '#e8e4dc', '#111111']
+    labels = ['Agency Net Profit', f'Dev/Overhead ({(100-agency_margin)}%)', f'Platinux Cost']
+    pie_net_profit = max(monthly_profit - plan_cost, 0)
+    values = [pie_net_profit, max(monthly_overhead, 0), plan_cost]
+    colors = ['#00c48c', '#e8e6e0', '#0f0f0f']
 
     fig2 = go.Figure(go.Pie(
         labels=labels,
-        values=[max(v, 0) for v in values],
+        values=values,
         hole=0.6,
-        marker=dict(colors=colors, line=dict(color='#faf9f6', width=2)),
+        marker=dict(colors=colors, line=dict(color='#fff', width=2)),
         textinfo='label+percent',
         textfont=dict(size=11),
         hovertemplate='%{label}: %{value:,}<extra></extra>'
     ))
     fig2.update_layout(
-        paper_bgcolor='#faf9f6', showlegend=False,
+        paper_bgcolor='#ffffff', showlegend=False,
         margin=dict(l=0, r=0, t=10, b=0), height=320,
         annotations=[dict(
-            text=f"{fmt(monthly_profit - plan_cost)}<br><span style='font-size:11px'>true cash</span>",
+            text=f"{fmt(pie_net_profit)}<br><span style='font-size:11px'>true profit</span>",
             x=0.5, y=0.5, font_size=14, showarrow=False
         )]
     )
@@ -697,42 +645,42 @@ with chart_col2:
 st.markdown('</div>', unsafe_allow_html=True)
 
 
-# ── COMPARISON TABLES ─────────────────────────────────────────────────────────
+# ── 6. DATA ACQUISITION METRIC MATRIX ─────────────────────────────────────────
 st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 st.markdown('<div class="section">', unsafe_allow_html=True)
 
-st.markdown('<div class="sec-eyebrow">Acquisition Comparison</div>', unsafe_allow_html=True)
-st.markdown('<div class="sec-title">Platinux vs Upwork & Cold Outreach</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-label">Acquisition Comparison</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Platinux vs Paid Acquisition</div>', unsafe_allow_html=True)
 
-marketing_yearly = marketing_cost * 12
+sdr_yearly = sdr_cost * 12
 plat_yearly = plan_cost * 12
 
 st.markdown(f"""
-<div class="ctable">
-  <div class="chead">
+<div class="compare-table">
+  <div class="compare-header">
     <span></span>
-    <span>Upwork / Freelancer Connects</span>
-    <span>Platinux Tracker</span>
+    <span>B2B Ads / Outbound SDR</span>
+    <span>Platinux Agency</span>
   </div>
-  <div class="crow">
-    <span class="lbl">Platform Commission</span>
-    <span class="bad">10% - 20% per client check</span>
-    <span class="good">0% (You keep 100%)</span>
+  <div class="compare-row">
+    <span class="label">Lead Intent</span>
+    <span class="bad">Cold (Interruptive)</span>
+    <span class="good">Hot (Actively Asking)</span>
   </div>
-  <div class="crow">
-    <span class="lbl">Lead Quality & Intent</span>
-    <span class="bad">Saturated bidding races</span>
-    <span class="good">Direct high-intent responses</span>
+  <div class="compare-row">
+    <span class="label">Cost to scale</span>
+    <span class="bad">Higher spend = more leads</span>
+    <span class="good">Unlimited leads (Flat Rate)</span>
   </div>
-  <div class="crow">
-    <span class="lbl">Client Connection</span>
-    <span class="bad">Locked into platform messenger</span>
-    <span class="good">You own the direct email/DM</span>
+  <div class="compare-row">
+    <span class="label">Lead Exclusivity</span>
+    <span class="bad">Bidding against competitors</span>
+    <span class="good">You reach out first</span>
   </div>
-  <div class="crow">
-    <span class="lbl">Annual Sourcing Cost</span>
-    <span class="bad">{fmt(marketing_yearly)}</span>
-    <span class="good">{fmt(plat_yearly)} Flat</span>
+  <div class="compare-row">
+    <span class="label">Annual Acquisition Cost</span>
+    <span class="bad">{fmt(sdr_yearly)}</span>
+    <span class="good">{fmt(plat_yearly)} flat</span>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -740,50 +688,65 @@ st.markdown(f"""
 st.markdown('</div>', unsafe_allow_html=True)
 
 
-# ── PRICING MATRIX PLANS ──────────────────────────────────────────────────────
+# ── 7. PRICING PLANS WORKSPACE ────────────────────────────────────────────────
 st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 st.markdown('<div class="section">', unsafe_allow_html=True)
 
-st.markdown('<div class="sec-eyebrow">Subscription Pricing</div>', unsafe_allow_html=True)
-st.markdown('<div class="sec-title">One deal covers the entire year.</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-label">Agency Plans</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">One deal covers the year.</div>', unsafe_allow_html=True)
 
-p1, p2 = st.columns(2, gap="medium")
+p1, p2, p3 = st.columns(3, gap="medium")
 
 if is_inr:
-    pro_p, agency_p = "₹1,999", "₹17,999"
-    pro_sub = "Best value for freelancers"
+    pro_p, agency_p, scale_p = "₹1,999", f"₹{plan_cost:,}", "Custom"
+    agency_yr = "₹160,000/yr"
 else:
-    pro_p, agency_p = "$79", "$199"
-    pro_sub = "Best value for freelancers"
+    pro_p, agency_p, scale_p = "$79", f"${plan_cost}", "$499+"
+    agency_yr = "$1,899/yr"
 
 with p1:
     st.markdown(f"""
-    <div class="pcard best">
-      <div class="ptag">Pro Plan — Solo Tracker</div>
-      <div class="pprice">{pro_p}</div>
-      <div class="psub">/ month · {pro_sub}</div>
-      <div class="pfeat">
-        ✓ Unlimited incoming tracked leads<br>
-        ✓ Instant real-time alerts<br>
-        ✓ Discord & Custom Platform Links<br>
-        ✓ 1 Dedicated Seat<br>
-        ✓ 0% Platform Commission fees
+    <div class="metric-card" style="height:100%;min-height:320px">
+      <div style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Pro (Solo Devs)</div>
+      <div style="font-size:32px;font-weight:700;color:#0f0f0f;margin-bottom:4px">{pro_p}</div>
+      <div style="font-size:13px;color:#aaa;margin-bottom:20px">/ mo</div>
+      <div style="font-size:13px;color:#555;line-height:2">
+        ✓ Unlimited leads<br>
+        ✓ Real-time alerts<br>
+        ✓ 1 User Seat<br>
+        — No team routing<br>
+        — No CRM integrations
       </div>
     </div>
     """, unsafe_allow_html=True)
 
 with p2:
     st.markdown(f"""
-    <div class="pcard">
-      <div class="ptag">Agency Core Framework</div>
-      <div class="pprice">{agency_p}</div>
-      <div class="psub">/ month · Built for expanding teams</div>
-      <div class="pfeat">
-        ✓ Everything inside the Pro Plan<br>
-        ✓ 5 Connected Dashboard Seats<br>
-        ✓ Active HubSpot / Salesforce Pipelines<br>
-        ✓ Live Slack Team Routing Hooks<br>
-        ✓ Full API Endpoint access
+    <div class="metric-card highlight" style="height:100%;min-height:320px">
+      <div style="font-size:11px;color:#00c48c;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Agency — Built for Teams</div>
+      <div style="font-size:32px;font-weight:700;color:#fff;margin-bottom:4px">{agency_p}</div>
+      <div style="font-size:13px;color:#666;margin-bottom:20px">/ mo · or {agency_yr}</div>
+      <div style="font-size:13px;color:#ccc;line-height:2">
+        ✓ Everything in Pro<br>
+        ✓ 5 Team Seats (Sales/SDR)<br>
+        ✓ Slack / Discord Routing<br>
+        ✓ HubSpot / Salesforce Sync<br>
+        ✓ API Access
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with p3:
+    st.markdown(f"""
+    <div class="metric-card" style="height:100%;min-height:320px">
+      <div style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Enterprise Scale</div>
+      <div style="font-size:32px;font-weight:700;color:#0f0f0f;margin-bottom:4px">{scale_p}</div>
+      <div style="font-size:13px;color:#aaa;margin-bottom:20px">/ mo</div>
+      <div style="font-size:13px;color:#555;line-height:2">
+        ✓ Unlimited Team Seats<br>
+        ✓ Custom Data Pipelines<br>
+        ✓ Dedicated Account Rep<br>
+        ✓ Whitelabel Reports
       </div>
     </div>
     """, unsafe_allow_html=True)
@@ -791,14 +754,14 @@ with p2:
 st.markdown('</div>', unsafe_allow_html=True)
 
 
-# ── BOTTOM MARKETING FOOTER CTA ───────────────────────────────────────────────
+# ── 8. BOTTOM MARKETING CONVERSION CTA ────────────────────────────────────────
 st.markdown(f"""
-<div class="cta">
-  <h2>Feed your portfolio.</h2>
-  <p>At {sym}{plan_cost:,}/mo, Platinux provides predictable lead sourcing without platform middleman loops.<br>
-     Secure your freelance revenue baseline today.</p>
-  <div style="font-size:13px; color:#555; margin-top:32px; font-family:'Inter', sans-serif;">
-    platinux.net/freelance · Cancel subscription anytime
+<div class="cta-section">
+  <h2>Feed your sales team.</h2>
+  <p>At {sym}{plan_cost:,}/mo, Platinux is a fraction of the cost of a single SDR.<br>
+     Fill your agency pipeline today.</p>
+  <div style="font-size:14px;color:#666;margin-top:32px">
+    platinux.net/agency · 14-Day Free Trial for Teams
   </div>
 </div>
 """, unsafe_allow_html=True)
