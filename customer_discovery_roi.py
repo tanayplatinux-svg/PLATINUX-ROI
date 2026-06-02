@@ -286,10 +286,10 @@ st.markdown('<div class="section-label">The Data Funnel</div>', unsafe_allow_htm
 st.markdown('<div class="section-title">The High-Intent Ingestion Pipeline</div>', unsafe_allow_html=True)
 st.markdown('<div class="section-sub">Here is how our infrastructure extracts active purchasers directly from raw social data streams.</div>', unsafe_allow_html=True)
 
+# FIXED: Replaced raw string HTML rendering with structural markdown injection block
 st.markdown("""
 <div class="fn-wrapper">
   <div class="fn-grid">
-    <!-- Stage 1 -->
     <div class="fn-stage">
       <div class="fn-title">1. Raw Social Web Ingestion</div>
       <div class="fn-desc">Continuous multi-node scraping monitoring text strings across social platforms.</div>
@@ -299,10 +299,7 @@ st.markdown("""
         <span class="fn-badge">BlueSky</span>
       </div>
     </div>
-    
     <div class="fn-arrow">➔</div>
-    
-    <!-- Stage 2 -->
     <div class="fn-stage dark">
       <div class="fn-title" style="color:#00c48c;">2. LLM Intent Parser</div>
       <div class="fn-desc" style="color:#a1a1aa;">Proprietary semantic filters scrub the data, deleting casual chitchat, news updates, and generic terms.</div>
@@ -311,10 +308,7 @@ st.markdown("""
         <span class="fn-badge" style="background:#27272a; color:#f4f4f5;">De-Noising Layer</span>
       </div>
     </div>
-    
     <div class="fn-arrow">➔</div>
-    
-    <!-- Stage 3 -->
     <div class="fn-stage active">
       <div class="fn-title">3. Actionable Qualified Lead</div>
       <div class="fn-desc">Verified buyer profiles, intent metrics, and source URLs mapped out with complete transparency.</div>
@@ -336,10 +330,9 @@ st.markdown('<div class="section-label">Operational Architecture</div>', unsafe_
 st.markdown('<div class="section-title">How we identify and deliver your market</div>', unsafe_allow_html=True)
 st.markdown('<div class="section-sub">A transparent breakdown of how our infrastructure monitors, filters, qualifies, and bridges leads directly into your workspace pipelines.</div>', unsafe_allow_html=True)
 
+# FIXED: Wrapped internal text components correctly without relying on breaking markdown code snippets
 st.markdown("""
 <div class="track-container">
-
-  <!-- Track 1 -->
   <div class="track-node">
     <div class="track-icon-marker">TRACK 01</div>
     <div class="track-content-panel">
@@ -352,7 +345,6 @@ st.markdown("""
     </div>
   </div>
 
-  <!-- Track 2 -->
   <div class="track-node">
     <div class="track-icon-marker">TRACK 02</div>
     <div class="track-content-panel">
@@ -362,7 +354,6 @@ st.markdown("""
       </div>
       <div class="track-headline">AI Intent Filtering & De-noising</div>
       <div class="track-body-text">Standard tools alert you every time your keyword is mentioned, creating massive administrative debt. Platinux passes every sentence through structural context models to measure explicit purchase timelines and immediate requirements.</div>
-      
       <div class="track-code-terminal">
         <div class="terminal-line drop"><span>[-] Mentions:</span> "I am reading a case study about enterprise CRMs." ➔ <strong>[Dropped: Zero Buying Action]</strong></div>
         <div class="terminal-line pass"><span>[+] Mentions:</span> "Outgrowing our current HubSpot setup for 45 reps. Need a system supporting custom lifecycle stages by next month. Recommendations?" ➔ <strong>[Passed: High-Intent Intent Detected]</strong></div>
@@ -370,7 +361,6 @@ st.markdown("""
     </div>
   </div>
 
-  <!-- Track 3 -->
   <div class="track-node">
     <div class="track-icon-marker">TRACK 03</div>
     <div class="track-content-panel">
@@ -383,7 +373,6 @@ st.markdown("""
     </div>
   </div>
 
-  <!-- Track 4 -->
   <div class="track-node">
     <div class="track-icon-marker">TRACK 04</div>
     <div class="track-content-panel">
@@ -396,10 +385,6 @@ st.markdown("""
     </div>
   </div>
 
-  <!-- Track 5 -->
-  <div class="track-style-connector"></div>
-
-  <!-- Track 5 Premium Card -->
   <div class="track-node premium">
     <div class="track-icon-marker">TRACK 05</div>
     <div class="track-content-panel">
@@ -411,7 +396,6 @@ st.markdown("""
       <div class="track-body-text">Your sales development or growth marketing teams click the direct origin link and post an organic, contextual response directly inside the source discussion thread. By positioning your brand as a helpful expert exactly when the query is live, you intercept the prospect before they ever navigate to search engines or contact legacy options.</div>
     </div>
   </div>
-
 </div>
 """, unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
@@ -433,7 +417,6 @@ with calc_l:
     is_corp_inr = currency_choice == "INR (₹)"
     b_sym = "₹" if is_corp_inr else "$"
     
-    # Dynamic setup bases on corporate scale
     base_saas_fee = 75000 if is_corp_inr else 850
     
     if is_corp_inr:
@@ -449,12 +432,10 @@ with calc_l:
 with calc_r:
     st.markdown("#### **Performance Forecasts**")
     
-    # Financial modeling math definitions
     total_conversions = volume_leads * (team_close_rate / 100)
     gross_new_revenue = total_conversions * val_ltv
     net_software_yield = gross_new_revenue - base_saas_fee
     
-    # Ad channel equivalent value generation (assuming it takes ~15 clicks on a search network to hit comparable intent)
     comparable_ad_saved = volume_leads * 15 * estimated_avg_cpc
     brand_roi_pct = round((gross_new_revenue / base_saas_fee) * 100) if base_saas_fee > 0 else 0
 
@@ -516,7 +497,6 @@ chart_l, chart_r = st.columns([3, 2], gap="large")
 
 with chart_l:
     st.markdown("##### Mapped Inbound Revenue Growth Over 12 Months")
-    # Compound metric layout for monthly progress scaling
     months_series = list(range(1, 13))
     compounded_growth = [max((gross_new_revenue * (1 + 0.05 * i)) - base_saas_fee, 0) for i in range(12)]
     
@@ -618,7 +598,7 @@ with col_p1:
     """, unsafe_allow_html=True)
 
 with col_p2:
-    st.markdown(f"""
+    st.markdown("""
     <div style="padding: 15px 0px;">
       <h3 style="margin-bottom:15px; color:#09090b; font-weight:700;">Scale your customer pipeline without ad platform dependencies</h3>
       <p style="font-size:15px; color:#52525b; line-height:1.7;">
@@ -633,7 +613,7 @@ st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ── 9. CALL TO ACTION CONVERSION ZONE ─────────────────────────────────────────
-st.markdown(f"""
+st.markdown("""
 <div class="cta-block">
   <h2>Intercept Active Buyers in Real Time</h2>
   <p>Stop monitoring keywords. Start landing verified customers where they speak on the internet.</p>
