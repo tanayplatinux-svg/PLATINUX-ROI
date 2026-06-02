@@ -1,6 +1,5 @@
 import streamlit as st
 import plotly.graph_objects as go
-import plotly.express as px
 
 st.set_page_config(
     page_title="Platinux Agency - ROI Calculator",
@@ -9,7 +8,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ── UNIFIED DESIGN SYSTEM & SCROLL-DRAWN TIMELINE LOGIC ───────────────────────
+# ── GLOBAL STYLE OVERRIDES ───────────────────────────────────────────────────
 st.markdown("""
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap');
@@ -25,24 +24,8 @@ st.markdown("""
     max-width: 90% !important; 
   }
 
-  /* Global Entrance Keyframes */
-  @keyframes fadeUp {
-    0% { opacity: 0; transform: translateY(50px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-  }
-  @keyframes drawLine {
-    0% { height: 0%; }
-    100% { height: 100%; }
-  }
-  @keyframes activeBadge {
-    0% { border-color: #e4e4e4; background: #fff; box-shadow: 0 0 0 0 rgba(0,196,140,0); }
-    50% { border-color: #00c48c; background: #f0fff8; box-shadow: 0 0 0 6px rgba(0,196,140,.15); }
-    100% { border-color: #00c48c; background: #0f0f0f; color: #fff; box-shadow: 0 0 0 4px #f0fff8; }
-  }
+  /* Global Animations */
+  @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
   @keyframes pulseHighlight {
     0% { box-shadow: 0 0 0 0 rgba(0, 196, 140, 0.4); }
     70% { box-shadow: 0 0 0 10px rgba(0, 196, 140, 0); }
@@ -50,11 +33,8 @@ st.markdown("""
   }
 
   .animate-in { animation: fadeIn 0.8s ease-out forwards; }
-  .animate-up { animation: fadeUp 0.6s ease-out forwards; }
-  .delay-1 { animation-delay: 0.1s; }
-  .delay-2 { animation-delay: 0.2s; }
 
-  /* Hero Layout */
+  /* Hero Section */
   .hero {
     background: #0f0f0f;
     color: #fff;
@@ -89,169 +69,14 @@ st.markdown("""
     line-height: 1.6;
   }
 
-  /* Structural Headings */
+  /* Structure Headings */
   .section { padding: 60px 0px; }
   .section-label { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #888; margin-bottom: 12px; }
   .section-title { font-size: 38px; font-weight: 700; color: #0f0f0f; margin-bottom: 12px; letter-spacing: -.5px; }
   .section-title em { font-style: normal; background: #b8fce8; border-radius: 6px; padding: 0 8px; }
   .section-sub { font-size: 16px; color: #666; margin-bottom: 40px; max-width: 650px; line-height: 1.6; }
 
-  /* ── DESKTOP SCROLL-TRAVELING TIMELINE IMPLEMENTATION ── */
-  .timeline-container {
-    position: relative;
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 20px 0;
-  }
-  /* The Base Static Track Line */
-  .timeline-container::before {
-    content: '';
-    position: absolute;
-    width: 2px;
-    background: #e4e4e4;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    margin-left: -1px;
-    z-index: 1;
-  }
-  /* The Dynamic Traveling Liquid Fill Line */
-  .timeline-container::after {
-    content: '';
-    position: absolute;
-    width: 2px;
-    background: #00c48c;
-    top: 0;
-    left: 50%;
-    margin-left: -1px;
-    z-index: 2;
-    height: 0%;
-  }
-
-  .timeline-block {
-    position: relative;
-    margin-bottom: 50px;
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    z-index: 3;
-    opacity: 0; /* Hidden initially, revealed by scroll */
-  }
-  .timeline-block:nth-child(even) {
-    justify-content: flex-end;
-  }
-  .timeline-pointer {
-    width: 50%;
-    padding-right: 50px;
-    box-sizing: border-box;
-  }
-  .timeline-block:nth-child(even) .timeline-pointer {
-    padding-right: 0;
-    padding-left: 50px;
-  }
-  
-  .timeline-icon {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    left: 50%;
-    top: 24px;
-    margin-left: -20px;
-    background: #fff;
-    border: 2px solid #e4e4e4;
-    border-radius: 50%;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 14px;
-    color: #0f0f0f;
-  }
-
-  /* Linking animations to browser viewport scroll tracking */
-  @supports (animation-timeline: view()) {
-    /* Main container animates the line fill based on container scroll depth */
-    .timeline-container {
-      view-timeline-name: --timeline;
-    }
-    .timeline-container::after {
-      animation: drawLine linear both;
-      animation-timeline: --timeline;
-      animation-range: entry 20% exit 80%;
-    }
-    /* Cards and badges animate into view as they enter the screen */
-    .timeline-block {
-      animation: fadeUp ease-out both;
-      animation-timeline: view();
-      animation-range: entry 5% cover 30%;
-    }
-    .timeline-icon {
-      animation: activeBadge linear both;
-      animation-timeline: view();
-      animation-range: entry 5% cover 28%;
-    }
-  }
-
-  /* Card Core Visuals */
-  .plx-step-card {
-    background: #fff;
-    border: 1.5px solid #e4e4e4;
-    border-radius: 16px;
-    padding: 24px 28px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.01);
-    transition: border-color .3s, box-shadow .3s, transform .3s;
-  }
-  .plx-step-card:hover {
-    border-color: #00c48c;
-    box-shadow: 0 8px 32px rgba(0,196,140,.12);
-    transform: translateY(-2px);
-  }
-  .plx-step-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .07em;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 100px;
-    margin-bottom: 12px;
-  }
-  .plx-step-title { font-size: 18px; font-weight: 700; color: #0a0a0a; margin-bottom: 8px; letter-spacing: -.3px; }
-  .plx-step-desc { font-size: 14px; color: #666; line-height: 1.6; }
-  .plx-step-detail { margin-top: 14px; font-size: 13px; color: #888; line-height: 1.5; }
-  .plx-step-detail strong { color: #0a0a0a; font-weight: 600; }
-
-  .plx-notif {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    background: #f7f7f5;
-    border: 1.5px solid #e4e4e4;
-    border-radius: 10px;
-    padding: 10px 12px;
-    margin-top: 14px;
-  }
-  .plx-notif-dot { width: 8px; height: 8px; border-radius: 50%; background: #00c48c; margin-top: 4px; flex-shrink: 0; }
-  .plx-notif-text { font-size: 12px; color: #555; line-height: 1.4; }
-  .plx-notif-text strong { color: #000; }
-
-  /* Premium Callout Card Accents */
-  .plx-money-card { background: #0a0a0a; border: 1.5px solid #00c48c; position: relative; overflow: hidden; }
-  .plx-money-card::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse at top left, rgba(0,196,140,.2) 0%, transparent 60%);
-  }
-  .plx-money-card .plx-step-title { color: #fff; }
-  .plx-money-card .plx-step-desc { color: #888; }
-  .plx-money-card .plx-step-detail { color: #666; }
-  .plx-money-card .plx-step-detail strong { color: #00c48c; }
-  .plx-money-amount { font-size: 36px; font-weight: 700; color: #00c48c; letter-spacing: -1px; margin-top: 12px; display: block; }
-  .plx-money-sub { font-size: 12px; color: #555; margin-top: 2px; }
-
-  /* Metrics Display Grid Modules */
+  /* Metrics Display Grid */
   .metric-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
   .metric-card {
     flex: 1; min-width: 140px; background: #fff; border: 1px solid #e8e6e0; border-radius: 12px; padding: 20px;
@@ -283,49 +108,6 @@ st.markdown("""
   .cta-section p { font-size: 18px; color: #888; margin-bottom: 40px; }
   .divider { height: 1px; background: #e8e6e0; margin: 40px 0px; }
 
-  /* ── MOBILE ADAPTIVE SCROLL ENGINE FIX ── */
-  @media (max-width: 768px) {
-    /* 1. Turn off desktop center line calculations */
-    .timeline-container::before { left: 20px; margin-left: 0; }
-    .timeline-container::after { display: none; } 
-
-    /* 2. Create a fully independent tracking track for mobile left-aligned viewports */
-    .timeline-container {
-      border-left: 2px solid #e4e4e4;
-      padding-left: 24px;
-      margin-left: 10px;
-    }
-    
-    .timeline-block { 
-      justify-content: flex-start !important; 
-      margin-bottom: 35px;
-    }
-    .timeline-pointer { 
-      width: 100% !important; 
-      padding-left: 20px !important; 
-      padding-right: 0 !important; 
-    }
-    /* Re-anchor numbers directly onto the new left timeline edge */
-    .timeline-icon { 
-      left: -26px !important; 
-      margin-left: 0 !important; 
-      top: 16px;
-    }
-
-    @supports (animation-timeline: view()) {
-      .timeline-block {
-        animation: fadeUp ease-out both;
-        animation-timeline: view();
-        animation-range: entry 10% cover 40%;
-      }
-      /* Trigger intense card tracking borders as thumb slides over it on mobile screens */
-      .timeline-block:has(~ .timeline-block) .plx-step-card {
-        border-color: #00c48c;
-      }
-    }
-  }
-
-  /* Normalization adjustments */
   #MainMenu { visibility: hidden; }
   footer { visibility: hidden; }
   header { visibility: hidden; }
@@ -335,115 +117,338 @@ st.markdown("""
 # ── HERO SECTION ──────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="hero animate-in">
-  <div class="hero-badge animate-up delay-1">⚡ platinux.net/agency - ROI Calculator</div>
-  <h1 class="animate-up delay-1">Stop scaling your sales team.<br>Scale your <span>lead flow.</span></h1>
-  <p class="animate-up delay-2">Platinux tracks founders and enterprises actively requesting custom development, SaaS builds, and design overhauls. Reach high-ticket clients before they post on Upwork.</p>
+  <div class="hero-badge">⚡ platinux.net/agency - ROI Calculator</div>
+  <h1>Stop scaling your sales team.<br>Scale your <span>lead flow.</span></h1>
+  <p>Platinux tracks founders and enterprises actively requesting custom development, SaaS builds, and design overhauls. Reach high-ticket clients before they post on Upwork.</p>
 </div>
 """, unsafe_allow_html=True)
 
 
-# ── INTERACTIVE TRAVELING TIMELINE ROADMAP ───────────────────────────────────
-st.markdown('<div class="section">', unsafe_allow_html=True)
-
+# ── HIGH PERFORMANCE INJECTED ROADMAP COMPONENT ──────────────────────────────
 st.markdown("""
-<div class="section-label">🗺 Your path to clients</div>
-<div class="section-title">From <em>zero</em> to paid. In 6 steps.</div>
-<div class="section-sub">Scroll down the page to watch how Platinux intercepts projects and streams revenue directly to your workflow dashboard.</div>
-""", unsafe_allow_html=True)
+<style>
+  .plx-road-section {
+    background: #f7f7f5;
+    padding: 60px 0 80px;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+  }
+  .plx-road-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .plx-timeline {
+    position: relative;
+    margin-top: 40px;
+  }
 
-st.markdown("""
-<div class="timeline-container">
+  /* Vertical Base Line */
+  .plx-timeline-track {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e4e4e4;
+    z-index: 1;
+  }
 
-  <!-- Step 1 -->
-  <div class="timeline-block">
-    <div class="timeline-icon">1</div>
-    <div class="timeline-pointer">
-      <div class="plx-step-card">
-        <div class="plx-step-tag" style="background:#f0fff8; color:#00875a;">🔍 Step 1</div>
-        <div class="plx-step-title">Business owner posts online</div>
-        <div class="plx-step-desc">Somewhere on Reddit, Facebook, LinkedIn or Threads, a real business owner types "looking for a web developer." It goes live publicly.</div>
-        <div class="plx-notif">
-          <div class="plx-notif-dot"></div>
-          <div class="plx-notif-text"><strong>r/entrepreneur:</strong> "Need someone to build a site for my salon — budget $800, want it done this month."</div>
+  /* The Active Traveling Colored Progress Bar Container */
+  .plx-timeline-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #00c48c;
+    height: 0%;
+    transition: height 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  /* Step Block Grid System */
+  .plx-step {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    align-items: center;
+    margin-bottom: 70px;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .plx-step.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Center Badge Nodes */
+  .plx-step-node {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .plx-node-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #e4e4e4;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    position: relative;
+    transition: border-color 0.4s, background-color 0.4s, box-shadow 0.4s;
+  }
+  .plx-step.visible .plx-node-circle {
+    border-color: #00c48c;
+    box-shadow: 0 0 0 6px rgba(0,196,140,.15);
+  }
+  .plx-node-num {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 18px;
+    height: 18px;
+    background: #000;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Roadmap Content Step Cards */
+  .plx-step-card-ui {
+    background: #fff;
+    border: 1.5px solid #e4e4e4;
+    border-radius: 16px;
+    padding: 24px 28px;
+    transition: border-color .3s, box-shadow .3s, transform .3s;
+  }
+  .plx-step.visible .plx-step-card-ui {
+    border-color: #00c48c;
+    box-shadow: 0 4px 20px rgba(0,196,140,0.08);
+  }
+  .plx-step-card-ui:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,196,140,.15) !important;
+  }
+
+  /* Alternating Placements */
+  .plx-step:nth-child(odd) .plx-step-card-block { grid-column: 1; }
+  .plx-step:nth-child(odd) .plx-step-node { grid-column: 2; }
+  .plx-step:nth-child(odd) .plx-step-empty { grid-column: 3; }
+
+  .plx-step:nth-child(even) .plx-step-empty { grid-column: 1; }
+  .plx-step:nth-child(even) .plx-step-node { grid-column: 2; }
+  .plx-step:nth-child(even) .plx-step-card-block { grid-column: 3; }
+
+  .plx-step-tag {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin-bottom: 10px;
+  }
+  .plx-step-title { font-size: 18px; font-weight: 700; color: #0a0a0a; margin-bottom: 8px; letter-spacing: -.3px; }
+  .plx-step-desc { font-size: 14px; color: #666; line-height: 1.6; }
+  .plx-step-detail { margin-top: 14px; font-size: 13px; color: #888; }
+  
+  .plx-notif {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #f7f7f5;
+    border: 1.5px solid #e4e4e4;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-top: 14px;
+  }
+  .plx-notif-dot { width: 8px; height: 8px; border-radius: 50%; background: #00c48c; margin-top: 4px; flex-shrink: 0; }
+  .plx-notif-text { font-size: 12px; color: #555; line-height: 1.4; }
+
+  /* Premium Callout Accents */
+  .plx-money-card-ui { background: #0a0a0a; border: 1.5px solid #00c48c !important; position: relative; overflow: hidden; }
+  .plx-money-card-ui::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at top left, rgba(0,196,140,.2) 0%, transparent 60%);
+  }
+  .plx-money-card-ui .plx-step-title { color: #fff; }
+  .plx-money-card-ui .plx-step-desc { color: #888; }
+  .plx-money-amount { font-size: 36px; font-weight: 700; color: #00c48c; letter-spacing: -1px; margin-top: 12px; display: block; }
+  .plx-money-sub { font-size: 12px; color: #555; margin-top: 2px; }
+
+  /* ── MOBILE RESPONSIVE ADAPTATION ENGINE ── */
+  @media (max-width: 768px) {
+    /* Precise alignment modification to center track perfectly on left-aligned mobile icons */
+    .plx-timeline-track { left: 20px; transform: none; }
+    .plx-step {
+      grid-template-columns: 40px 1fr !important;
+      margin-bottom: 45px;
+    }
+    .plx-step:nth-child(odd) .plx-step-node, .plx-step:nth-child(even) .plx-step-node { grid-column: 1; justify-content: flex-start; }
+    .plx-step:nth-child(odd) .plx-step-card-block, .plx-step:nth-child(even) .plx-step-card-block { grid-column: 2; }
+    .plx-step-empty { display: none; }
+    .plx-node-circle { width: 40px; height: 40px; font-size: 16px; }
+    .plx-timeline-track { top: 15px; bottom: 15px; }
+  }
+</style>
+
+<section class="plx-road-section">
+  <div class="plx-road-inner">
+
+    <div class="section-label">🗺 Your path to clients</div>
+    <div class="section-title">From <em>zero</em> to paid. In 6 steps.</div>
+    <div class="section-sub">Scroll down the page to watch the progress line fill and uncover the roadmap components interactively.</div>
+
+    <div class="plx-timeline" id="plx-js-timeline">
+      <div class="plx-timeline-track">
+        <div class="plx-timeline-progress" id="plx-js-progress"></div>
+      </div>
+
+      <!-- STEP 1 -->
+      <div class="plx-step" data-step-index="1">
+        <div class="plx-step-card-block">
+          <div class="plx-step-card-ui">
+            <div class="plx-step-tag" style="background:#f0fff8; color:#00875a;">🔍 Step 1</div>
+            <div class="plx-step-title">Business owner posts online</div>
+            <div class="plx-step-desc">Somewhere on Reddit, Facebook, LinkedIn or Threads, a real business owner types "looking for a web developer." It goes live publicly.</div>
+            <div class="plx-notif">
+              <div class="plx-notif-dot"></div>
+              <div class="plx-notif-text"><strong>r/entrepreneur:</strong> "Need someone to build a site for my salon — budget $800, want it done this month."</div>
+            </div>
+          </div>
+        </div>
+        <div class="plx-step-node">
+          <div class="plx-node-circle">📝<div class="plx-node-num">1</div></div>
+        </div>
+        <div class="plx-step-empty"></div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="plx-step" data-step-index="2">
+        <div class="plx-step-empty"></div>
+        <div class="plx-step-node">
+          <div class="plx-node-circle">⚡<div class="plx-node-num">2</div></div>
+        </div>
+        <div class="plx-step-card-block">
+          <div class="plx-step-card-ui">
+            <div class="plx-step-tag" style="background:#fff8e6; color:#b45309;">⚡ Step 2</div>
+            <div class="plx-step-title">Platinux detects it instantly</div>
+            <div class="plx-step-desc">Our engine scans 7+ platforms 24/7. The second the post goes live, we capture it, verify it's a real business owner (not spam), and score its intent.</div>
+            <div class="plx-step-detail"><strong>Avg detection time:</strong> under 60 seconds</div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Step 2 -->
-  <div class="timeline-block">
-    <div class="timeline-icon">2</div>
-    <div class="timeline-pointer">
-      <div class="plx-step-card">
-        <div class="plx-step-tag" style="background:#fff8e6; color:#b45309;">⚡ Step 2</div>
-        <div class="plx-step-title">Platinux detects it instantly</div>
-        <div class="plx-step-desc">Our engine scans 7+ platforms 24/7. The second the post goes live, we capture it, verify it's a real business owner (not spam), and score its intent.</div>
-        <div class="plx-step-detail"><strong>Avg detection time:</strong> under 60 seconds</div>
+      <!-- STEP 3 -->
+      <div class="plx-step" data-step-index="3">
+        <div class="plx-step-card-block">
+          <div class="plx-step-card-ui">
+            <div class="plx-step-tag" style="background:#f0f9ff; color:#0369a1;">🔔 Step 3</div>
+            <div class="plx-step-title">You get a real-time alert</div>
+            <div class="plx-step-desc">Platinux sends you a direct link to the post the moment it's verified. You see the platform, the post, the budget signal — everything you need to respond.</div>
+            <div class="plx-notif">
+              <div class="plx-notif-dot"></div>
+              <div class="plx-notif-text"><strong>🔔 New Project Alert</strong> — Salon owner · Reddit · Budget ~$800 · Posted 2 min ago</div>
+            </div>
+          </div>
+        </div>
+        <div class="plx-step-node">
+          <div class="plx-node-circle">🔔<div class="plx-node-num">3</div></div>
+        </div>
+        <div class="plx-step-empty"></div>
       </div>
-    </div>
-  </div>
 
-  <!-- Step 3 -->
-  <div class="timeline-block">
-    <div class="timeline-icon">3</div>
-    <div class="timeline-pointer">
-      <div class="plx-step-card">
-        <div class="plx-step-tag" style="background:#f0f9ff; color:#0369a1;">🔔 Step 3</div>
-        <div class="plx-step-title">You get a real-time alert</div>
-        <div class="plx-step-desc">Platinux sends you a direct link to the post the moment it's verified. You see the platform, the post, the budget signal — everything you need to respond.</div>
-        <div class="plx-notif">
-          <div class="plx-notif-dot"></div>
-          <div class="plx-notif-text"><strong>🔔 New Project Alert</strong> — Salon owner · Reddit · Budget ~$800 · Posted 2 min ago → <strong style="color:#00c48c">View post</strong></div>
+      <!-- STEP 4 -->
+      <div class="plx-step" data-step-index="4">
+        <div class="plx-step-empty"></div>
+        <div class="plx-step-node">
+          <div class="plx-node-circle">💬<div class="plx-node-num">4</div></div>
+        </div>
+        <div class="plx-step-card-block">
+          <div class="plx-step-card-ui">
+            <div class="plx-step-tag" style="background:#fdf0ff; color:#7e22ce;">💬 Step 4</div>
+            <div class="plx-step-title">You reply first</div>
+            <div class="plx-step-desc">You go directly to the post and respond — as a comment, a DM, or a reply. The business owner gets your message before they've even seen 10 other pitches.</div>
+            <div class="plx-step-detail">Freelancers who respond within 1 hour close at <strong>3× the rate</strong>.</div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Step 4 -->
-  <div class="timeline-block">
-    <div class="timeline-icon">4</div>
-    <div class="timeline-pointer">
-      <div class="plx-step-card">
-        <div class="plx-step-tag" style="background:#fdf0ff; color:#7e22ce;">💬 Step 4</div>
-        <div class="plx-step-title">You reply first</div>
-        <div class="plx-step-desc">You go directly to the post and respond — as a comment, a DM, or a reply. The business owner gets your message before they've even seen 10 other pitches.</div>
-        <div class="plx-step-detail">Freelancers who respond within 1 hour close at <strong>3× the rate</strong> of those who respond later.</div>
+      <!-- STEP 5 -->
+      <div class="plx-step" data-step-index="5">
+        <div class="plx-step-card-block">
+          <div class="plx-step-card-ui">
+            <div class="plx-step-tag" style="background:#fff1f0; color:#b91c1c;">🤝 Step 5</div>
+            <div class="plx-step-title">Discovery call, scope, close</div>
+            <div class="plx-step-desc">You have a conversation with a business owner who already said they need a developer. No cold pitching — they raised their hand first.</div>
+            <div class="plx-step-detail">No platform middleman. <strong>You own the relationship directly.</strong></div>
+          </div>
+        </div>
+        <div class="plx-step-node">
+          <div class="plx-node-circle">🤝<div class="plx-node-num">5</div></div>
+        </div>
+        <div class="plx-step-empty"></div>
       </div>
-    </div>
-  </div>
 
-  <!-- Step 5 -->
-  <div class="timeline-block">
-    <div class="timeline-icon">5</div>
-    <div class="timeline-pointer">
-      <div class="plx-step-card">
-        <div class="plx-step-tag" style="background:#fff1f0; color:#b91c1c;">🤝 Step 5</div>
-        <div class="plx-step-title">Discovery call, scope, close</div>
-        <div class="plx-step-desc">You have a conversation with a business owner who already said they need a developer. No cold pitching — they raised their hand first. Agree on scope, timeline, and price.</div>
-        <div class="plx-step-detail">No platform middleman. No bidding wars.<br><strong>You own the client relationship directly.</strong></div>
+      <!-- STEP 6 -->
+      <div class="plx-step" data-step-index="6">
+        <div class="plx-step-empty"></div>
+        <div class="plx-step-node">
+          <div class="plx-node-circle">💰<div class="plx-node-num" style="background:#00c48c; color:#000;">6</div></div>
+        </div>
+        <div class="plx-step-card-block">
+          <div class="plx-step-card-ui plx-money-card-ui">
+            <div class="plx-step-tag" style="background:rgba(0,196,140,.15); color:#00c48c;">💰 Step 6</div>
+            <div class="plx-step-title">Project delivered. Money in.</div>
+            <div class="plx-step-desc">You build, deliver, and get paid. No Upwork commissions eating 20% of your income. Just you, the client, and the full project value.</div>
+            <span class="plx-money-amount">+$2,400</span>
+            <div class="plx-money-sub">avg first project from a Platinux lead</div>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
+</section>
 
-  <!-- Step 6 -->
-  <div class="timeline-block">
-    <div class="timeline-icon">6</div>
-    <div class="timeline-pointer">
-      <div class="plx-step-card plx-money-card">
-        <div class="plx-step-tag" style="background:rgba(0,196,140,.15); color:#00c48c;">💰 Step 6</div>
-        <div class="plx-step-title">Project delivered. Money in.</div>
-        <div class="plx-step-desc">You build, deliver, and get paid. No Upwork commissions eating 20% of your income. No platform owning your client. Just you, the client, and the full project value.</div>
-        <span class="plx-money-amount">+$2,400</span>
-        <div class="plx-money-sub">avg first project from a Platinux lead · directly to you</div>
-        <div class="plx-step-detail" style="margin-top:16px">Platinux cost: <strong>$79/mo</strong>&nbsp;&nbsp;·&nbsp;&nbsp;Your ROI: <strong>30×</strong></div>
-      </div>
-    </div>
-  </div>
+<script>
+  // Robust Intersection Observer calculations to bypass iframe/Streamlit viewport constraints
+  const plxSteps = document.querySelectorAll('.plx-step');
+  const progressLine = document.getElementById('plx-js-progress');
+  const totalSteps = plxSteps.length;
 
-</div>
+  const roadObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        
+        // Dynamically shift track progress based on current milestone step index reached
+        const stepNum = parseInt(entry.target.getAttribute('data-step-index'));
+        const targetPercent = Math.min(100, Math.round(((stepNum - 0.5) / totalSteps) * 100));
+        progressLine.style.height = targetPercent + '%';
+      }
+    });
+  }, {
+    root: null,
+    threshold: 0.15,
+    rootMargin: "0px 0px -40px 0px"
+  });
+
+  plxSteps.forEach(step => roadObserver.observe(step));
+</script>
 """, unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ── ROI CALCULATOR SECTION ────────────────────────────────────────────────────
