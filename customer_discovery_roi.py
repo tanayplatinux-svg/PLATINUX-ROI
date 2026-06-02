@@ -100,57 +100,102 @@ st.markdown("""
     line-height: 1.6;
   }
 
-  /* ── FUNNELING DIAGRAM COMPONENTS ── */
-  .fn-wrapper {
+  /* ── VISUAL FUNNEL ARCHITECTURE (REBUILT) ── */
+  .visual-funnel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
     background: #ffffff;
     border: 1px solid #e4e4e7;
     border-radius: 20px;
-    padding: 35px;
+    padding: 50px 30px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.02);
     margin: 20px 0 40px;
+    flex-wrap: wrap;
   }
-  .fn-grid {
+  
+  .v-col { display: flex; flex-direction: column; gap: 12px; }
+
+  /* Left Side: Sources */
+  .v-source-card {
+    background: #ffffff;
+    border: 1px solid #e4e4e7;
+    border-radius: 12px;
+    padding: 12px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 15px;
+    width: 220px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    font-weight: 600;
+    color: #09090b;
+    font-size: 14px;
+    transition: transform 0.2s ease;
   }
-  .fn-stage {
-    background: #f4f4f5;
-    border: 1px solid #e4e4e7;
-    border-radius: 14px;
-    padding: 20px;
-    text-align: center;
-    flex: 1;
+  .v-source-card:hover { transform: translateX(5px); border-color: #00c48c; }
+  .v-src-left { display: flex; align-items: center; gap: 10px; }
+  .v-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .v-link-dot { width: 6px; height: 6px; border-radius: 50%; background: #d4d4d8; }
+  
+  /* Center: The CSS Funnel */
+  .v-center-wrapper { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+  .v-funnel-graphic {
+    width: 260px;
+    height: 340px;
+    background: linear-gradient(180deg, rgba(0, 196, 140, 0.15) 0%, rgba(0, 196, 140, 0.9) 100%);
+    clip-path: polygon(0 0, 100% 0, 70% 65%, 70% 100%, 30% 100%, 30% 65%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
     position: relative;
   }
-  .fn-stage.dark {
+  .v-funnel-text {
+    width: 80%;
+    text-align: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    color: #064e3b;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .v-funnel-result {
+    margin-top: auto;
+    margin-bottom: 25px;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 38px;
+    line-height: 1.1;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .v-funnel-result span { display: block; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+  .v-engine-label { font-size: 12px; font-weight: 700; color: #a1a1aa; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* Right Side: Output Leads */
+  .v-lead-card {
     background: #09090b;
-    border-color: #1e1e24;
-    color: #fff;
+    border: 1px solid #27272a;
+    border-radius: 14px;
+    padding: 18px 22px;
+    width: 290px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
   }
-  .fn-stage.active {
-    background: #f0fdf4;
-    border-color: #bbf7d0;
+  .v-lead-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #00c48c;
   }
-  .fn-title { font-size: 14px; font-weight: 700; color: #09090b; margin-bottom: 8px; }
-  .fn-stage.dark .fn-title { color: #ffffff; }
-  .fn-stage.active .fn-title { color: #16a34a; }
-  .fn-desc { font-size: 12px; color: #71717a; line-height: 1.4; }
-  .fn-stage.dark .fn-desc { color: #a1a1aa; }
-  
-  .fn-arrow {
-    font-size: 24px;
-    color: #a1a1aa;
-    font-weight: bold;
-    user-select: none;
+  .v-lead-title { color: #ffffff; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .v-lead-meta { color: #71717a; font-size: 12px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .v-lead-meta span { display: inline-block; width: 6px; height: 6px; background: #3f3f46; border-radius: 50%; }
+  .v-badge { 
+    display: inline-block; background: rgba(0, 196, 140, 0.15); color: #00c48c; 
+    padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; border: 1px solid rgba(0,196,140,0.3);
   }
-  .fn-badge-row {
-    display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 10px;
-  }
-  .fn-badge {
-    font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: #e4e4e7; color: #3f3f46;
-  }
+  .v-arrow { color: #d4d4d8; font-size: 24px; }
 
   /* ── ROADMAP SYSTEM TRACKS ── */
   .track-container { position: relative; max-width: 1200px; margin: 40px auto; }
@@ -253,9 +298,9 @@ st.markdown("""
   .divider-line { height: 1px; background: #e4e4e7; margin: 50px 0px; }
 
   /* Responsive Fixes */
-  @media (max-width: 768px) {
-    .fn-grid { flex-direction: column; }
-    .fn-arrow { transform: rotate(90deg); margin: 5px 0; }
+  @media (max-width: 900px) {
+    .visual-funnel-container { flex-direction: column; text-align: center; }
+    .v-arrow { transform: rotate(90deg); margin: 10px 0; }
     .track-container::before { left: 20px; }
     .track-icon-marker { width: 50px; height: 36px; font-size: 11px; }
     .track-node { gap: 15px; }
@@ -280,44 +325,81 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ── 3. DATA FUNNELING DIAGRAM SECTION ─────────────────────────────────────────
+# ── 3. DATA FUNNELING DIAGRAM SECTION (REBUILT TO MATCH IMAGE 2) ──────────────
 st.markdown('<div class="section">', unsafe_allow_html=True)
 st.markdown('<div class="section-label">The Data Funnel</div>', unsafe_allow_html=True)
 st.markdown('<div class="section-title">The High-Intent Ingestion Pipeline</div>', unsafe_allow_html=True)
 st.markdown('<div class="section-sub">Here is how our infrastructure extracts active purchasers directly from raw social data streams.</div>', unsafe_allow_html=True)
 
-# FIXED: Replaced raw string HTML rendering with structural markdown injection block
 st.markdown("""
-<div class="fn-wrapper">
-  <div class="fn-grid">
-    <div class="fn-stage">
-      <div class="fn-title">1. Raw Social Web Ingestion</div>
-      <div class="fn-desc">Continuous multi-node scraping monitoring text strings across social platforms.</div>
-      <div class="fn-badge-row">
-        <span class="fn-badge">Reddit API/Streams</span>
-        <span class="fn-badge">X Firehose</span>
-        <span class="fn-badge">BlueSky</span>
-      </div>
+<div class="visual-funnel-container">
+  
+  <!-- Left Column: Social Sources -->
+  <div class="v-col">
+    <div class="v-source-card">
+      <div class="v-src-left"><div class="v-dot" style="background:#ef4444;"></div> Reddit</div>
+      <div class="v-link-dot"></div>
     </div>
-    <div class="fn-arrow">➔</div>
-    <div class="fn-stage dark">
-      <div class="fn-title" style="color:#00c48c;">2. LLM Intent Parser</div>
-      <div class="fn-desc" style="color:#a1a1aa;">Proprietary semantic filters scrub the data, deleting casual chitchat, news updates, and generic terms.</div>
-      <div class="fn-badge-row">
-        <span class="fn-badge" style="background:#27272a; color:#f4f4f5;">Context Filters</span>
-        <span class="fn-badge" style="background:#27272a; color:#f4f4f5;">De-Noising Layer</span>
-      </div>
+    <div class="v-source-card">
+      <div class="v-src-left"><div class="v-dot" style="background:#3b82f6;"></div> Facebook</div>
+      <div class="v-link-dot"></div>
     </div>
-    <div class="fn-arrow">➔</div>
-    <div class="fn-stage active">
-      <div class="fn-title">3. Actionable Qualified Lead</div>
-      <div class="fn-desc">Verified buyer profiles, intent metrics, and source URLs mapped out with complete transparency.</div>
-      <div class="fn-badge-row">
-        <span class="fn-badge" style="background:#bbf7d0; color:#16a34a;">100% Retained</span>
-        <span class="fn-badge" style="background:#bbf7d0; color:#16a34a;">Zero Noise</span>
-      </div>
+    <div class="v-source-card">
+      <div class="v-src-left"><div class="v-dot" style="background:#d946ef;"></div> Instagram</div>
+      <div class="v-link-dot"></div>
+    </div>
+    <div class="v-source-card">
+      <div class="v-src-left"><div class="v-dot" style="background:#0ea5e9;"></div> LinkedIn</div>
+      <div class="v-link-dot"></div>
+    </div>
+    <div class="v-source-card">
+      <div class="v-src-left"><div class="v-dot" style="background:#22c55e;"></div> Telegram</div>
+      <div class="v-link-dot"></div>
+    </div>
+    <div class="v-source-card">
+      <div class="v-src-left"><div class="v-dot" style="background:#18181b;"></div> Twitter / X</div>
+      <div class="v-link-dot"></div>
     </div>
   </div>
+
+  <div class="v-arrow">➔</div>
+
+  <!-- Center Column: The Funnel Graphic -->
+  <div class="v-center-wrapper">
+    <div class="v-funnel-graphic">
+      <div class="v-funnel-text">100,000+ POSTS</div>
+      <div class="v-funnel-text" style="width: 60%; border-bottom: none; margin-top:10px;">AI FILTERED</div>
+      <div class="v-funnel-text" style="width: 40%; border-bottom: none;">VERIFIED</div>
+      
+      <div class="v-funnel-result">
+        100
+        <span>HOT LEADS</span>
+      </div>
+    </div>
+    <div class="v-engine-label">PLATINUX ENGINE</div>
+  </div>
+
+  <div class="v-arrow">➔</div>
+
+  <!-- Right Column: Final Qualified Leads -->
+  <div class="v-col">
+    <div class="v-lead-card">
+      <div class="v-lead-title">Small Business Owner</div>
+      <div class="v-lead-meta"><span></span> Posted 3 min ago · Reddit</div>
+      <div class="v-badge">✓ Verified Budget</div>
+    </div>
+    <div class="v-lead-card">
+      <div class="v-lead-title">Startup Founder</div>
+      <div class="v-lead-meta"><span></span> Posted 11 min ago · LinkedIn</div>
+      <div class="v-badge">✓ High Intent</div>
+    </div>
+    <div class="v-lead-card">
+      <div class="v-lead-title">E-commerce Brand</div>
+      <div class="v-lead-meta"><span></span> Posted 24 min ago · Facebook</div>
+      <div class="v-badge">✓ Ready to Hire</div>
+    </div>
+  </div>
+
 </div>
 """, unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
@@ -330,7 +412,6 @@ st.markdown('<div class="section-label">Operational Architecture</div>', unsafe_
 st.markdown('<div class="section-title">How we identify and deliver your market</div>', unsafe_allow_html=True)
 st.markdown('<div class="section-sub">A transparent breakdown of how our infrastructure monitors, filters, qualifies, and bridges leads directly into your workspace pipelines.</div>', unsafe_allow_html=True)
 
-# FIXED: Wrapped internal text components correctly without relying on breaking markdown code snippets
 st.markdown("""
 <div class="track-container">
   <div class="track-node">
@@ -356,7 +437,7 @@ st.markdown("""
       <div class="track-body-text">Standard tools alert you every time your keyword is mentioned, creating massive administrative debt. Platinux passes every sentence through structural context models to measure explicit purchase timelines and immediate requirements.</div>
       <div class="track-code-terminal">
         <div class="terminal-line drop"><span>[-] Mentions:</span> "I am reading a case study about enterprise CRMs." ➔ <strong>[Dropped: Zero Buying Action]</strong></div>
-        <div class="terminal-line pass"><span>[+] Mentions:</span> "Outgrowing our current HubSpot setup for 45 reps. Need a system supporting custom lifecycle stages by next month. Recommendations?" ➔ <strong>[Passed: High-Intent Intent Detected]</strong></div>
+        <div class="terminal-line pass"><span>[+] Mentions:</span> "Outgrowing our current HubSpot setup for 45 reps. Need a system supporting custom lifecycle stages by next month. Recommendations?" ➔ <strong>[Passed: High-Intent Detected]</strong></div>
       </div>
     </div>
   </div>
