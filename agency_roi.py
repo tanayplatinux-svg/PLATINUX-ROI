@@ -156,7 +156,7 @@ st.markdown("""
     z-index: 1;
   }
 
-  /* The Active Traveling Colored Progress Bar Container */
+  /* Traveling Progress Bar */
   .plx-timeline-progress {
     position: absolute;
     left: 0;
@@ -288,9 +288,8 @@ st.markdown("""
   .plx-money-amount { font-size: 36px; font-weight: 700; color: #00c48c; letter-spacing: -1px; margin-top: 12px; display: block; }
   .plx-money-sub { font-size: 12px; color: #555; margin-top: 2px; }
 
-  /* ── MOBILE RESPONSIVE ADAPTATION ENGINE ── */
+  /* Mobile Adaptation */
   @media (max-width: 768px) {
-    /* Precise alignment modification to center track perfectly on left-aligned mobile icons */
     .plx-timeline-track { left: 20px; transform: none; }
     .plx-step {
       grid-template-columns: 40px 1fr !important;
@@ -316,7 +315,6 @@ st.markdown("""
         <div class="plx-timeline-progress" id="plx-js-progress"></div>
       </div>
 
-      <!-- STEP 1 -->
       <div class="plx-step" data-step-index="1">
         <div class="plx-step-card-block">
           <div class="plx-step-card-ui">
@@ -335,7 +333,6 @@ st.markdown("""
         <div class="plx-step-empty"></div>
       </div>
 
-      <!-- STEP 2 -->
       <div class="plx-step" data-step-index="2">
         <div class="plx-step-empty"></div>
         <div class="plx-step-node">
@@ -351,7 +348,6 @@ st.markdown("""
         </div>
       </div>
 
-      <!-- STEP 3 -->
       <div class="plx-step" data-step-index="3">
         <div class="plx-step-card-block">
           <div class="plx-step-card-ui">
@@ -370,7 +366,6 @@ st.markdown("""
         <div class="plx-step-empty"></div>
       </div>
 
-      <!-- STEP 4 -->
       <div class="plx-step" data-step-index="4">
         <div class="plx-step-empty"></div>
         <div class="plx-step-node">
@@ -386,7 +381,6 @@ st.markdown("""
         </div>
       </div>
 
-      <!-- STEP 5 -->
       <div class="plx-step" data-step-index="5">
         <div class="plx-step-card-block">
           <div class="plx-step-card-ui">
@@ -402,7 +396,6 @@ st.markdown("""
         <div class="plx-step-empty"></div>
       </div>
 
-      <!-- STEP 6 -->
       <div class="plx-step" data-step-index="6">
         <div class="plx-step-empty"></div>
         <div class="plx-step-node">
@@ -424,7 +417,6 @@ st.markdown("""
 </section>
 
 <script>
-  // Robust Intersection Observer calculations to bypass iframe/Streamlit viewport constraints
   const plxSteps = document.querySelectorAll('.plx-step');
   const progressLine = document.getElementById('plx-js-progress');
   const totalSteps = plxSteps.length;
@@ -433,8 +425,6 @@ st.markdown("""
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        
-        // Dynamically shift track progress based on current milestone step index reached
         const stepNum = parseInt(entry.target.getAttribute('data-step-index'));
         const targetPercent = Math.min(100, Math.round(((stepNum - 0.5) / totalSteps) * 100));
         progressLine.style.height = targetPercent + '%';
@@ -477,7 +467,11 @@ with calc_col_left:
     leads_per_month = st.slider("Platinux Leads worked per month", 20, 300, 100, step=10)
     conversion_rate = st.slider("Close rate (%)", 1, 20, 3, step=1)
     agency_margin = st.slider("Net Profit Margin (%)", 10, 80, 40, step=5)
-    sdr_cost = st.slider("Current Outbound/Ad spend per month", 500, 10000, 2000, step=500) if not is_inr else st.slider("Current Outbound/Ad spend per month (₹)", 40000, 800000, 150000, step=20000)
+    
+    if is_inr:
+        sdr_cost = st.slider("Current Outbound/Ad spend per month (₹)", 40000, 800000, 150000, step=20000)
+    else:
+        sdr_cost = st.slider("Current Outbound/Ad spend per month ($)", 500, 10000, 2000, step=500)
 
 with calc_col_right:
     st.markdown("**Your Agency Results**")
