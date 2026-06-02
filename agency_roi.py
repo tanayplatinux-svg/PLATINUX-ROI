@@ -9,7 +9,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ── UNIFIED DESIGN SYSTEM & UTILITY STYLES ────────────────────────────────────
+# ── UNIFIED DESIGN SYSTEM & SCROLL-DRAWN TIMELINE LOGIC ───────────────────────
 st.markdown("""
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap');
@@ -19,21 +19,29 @@ st.markdown("""
   }
   .main { background: #f8f7f4; }
   
-  /* Margins on left and right-hand side of the page */
   .block-container { 
     padding-left: 5% !important; 
     padding-right: 5% !important; 
     max-width: 90% !important; 
   }
 
-  /* Global Animations */
+  /* Global Entrance Keyframes */
   @keyframes fadeUp {
-    0% { opacity: 0; transform: translateY(40px); }
+    0% { opacity: 0; transform: translateY(50px); }
     100% { opacity: 1; transform: translateY(0); }
   }
   @keyframes fadeIn {
     0% { opacity: 0; }
     100% { opacity: 1; }
+  }
+  @keyframes drawLine {
+    0% { height: 0%; }
+    100% { height: 100%; }
+  }
+  @keyframes activeBadge {
+    0% { border-color: #e4e4e4; background: #fff; box-shadow: 0 0 0 0 rgba(0,196,140,0); }
+    50% { border-color: #00c48c; background: #f0fff8; box-shadow: 0 0 0 6px rgba(0,196,140,.15); }
+    100% { border-color: #00c48c; background: #0f0f0f; color: #fff; box-shadow: 0 0 0 4px #f0fff8; }
   }
   @keyframes pulseHighlight {
     0% { box-shadow: 0 0 0 0 rgba(0, 196, 140, 0.4); }
@@ -41,13 +49,12 @@ st.markdown("""
     100% { box-shadow: 0 0 0 0 rgba(0, 196, 140, 0); }
   }
 
-  .animate-up { animation: fadeUp 0.6s ease-out forwards; }
   .animate-in { animation: fadeIn 0.8s ease-out forwards; }
+  .animate-up { animation: fadeUp 0.6s ease-out forwards; }
   .delay-1 { animation-delay: 0.1s; }
   .delay-2 { animation-delay: 0.2s; }
-  .delay-3 { animation-delay: 0.3s; }
 
-  /* Hero Section */
+  /* Hero Layout */
   .hero {
     background: #0f0f0f;
     color: #fff;
@@ -82,46 +89,22 @@ st.markdown("""
     line-height: 1.6;
   }
 
-  /* Structural Sections */
+  /* Structural Headings */
   .section { padding: 60px 0px; }
-  .section-label {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: #888;
-    margin-bottom: 12px;
-  }
-  .section-title {
-    font-size: 38px;
-    font-weight: 700;
-    color: #0f0f0f;
-    margin-bottom: 12px;
-    letter-spacing: -.5px;
-  }
-  .section-title em {
-    font-style: normal;
-    background: #b8fce8;
-    border-radius: 6px;
-    padding: 0 8px;
-  }
-  .section-sub {
-    font-size: 16px;
-    color: #666;
-    margin-bottom: 40px;
-    max-width: 650px;
-    line-height: 1.6;
-  }
+  .section-label { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #888; margin-bottom: 12px; }
+  .section-title { font-size: 38px; font-weight: 700; color: #0f0f0f; margin-bottom: 12px; letter-spacing: -.5px; }
+  .section-title em { font-style: normal; background: #b8fce8; border-radius: 6px; padding: 0 8px; }
+  .section-sub { font-size: 16px; color: #666; margin-bottom: 40px; max-width: 650px; line-height: 1.6; }
 
-  /* ── FIX: VISUAL TIMELINE CORRECTIONS (Alternates perfectly like image_9d3efa.png) ── */
+  /* ── DESKTOP SCROLL-TRAVELING TIMELINE IMPLEMENTATION ── */
   .timeline-container {
     position: relative;
     max-width: 1100px;
     margin: 40px auto;
     padding: 20px 0;
   }
-  /* Center line */
-  .timeline-container::after {
+  /* The Base Static Track Line */
+  .timeline-container::before {
     content: '';
     position: absolute;
     width: 2px;
@@ -132,28 +115,41 @@ st.markdown("""
     margin-left: -1px;
     z-index: 1;
   }
+  /* The Dynamic Traveling Liquid Fill Line */
+  .timeline-container::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    background: #00c48c;
+    top: 0;
+    left: 50%;
+    margin-left: -1px;
+    z-index: 2;
+    height: 0%;
+  }
+
   .timeline-block {
     position: relative;
-    margin-bottom: 40px;
+    margin-bottom: 50px;
     width: 100%;
     display: flex;
-    justify-content: flex-start; /* Odd numbers default left */
-    z-index: 2;
+    justify-content: flex-start;
+    z-index: 3;
+    opacity: 0; /* Hidden initially, revealed by scroll */
   }
   .timeline-block:nth-child(even) {
-    justify-content: flex-end; /* Even numbers jump right */
+    justify-content: flex-end;
   }
   .timeline-pointer {
     width: 50%;
-    padding-right: 40px;
+    padding-right: 50px;
     box-sizing: border-box;
   }
   .timeline-block:nth-child(even) .timeline-pointer {
     padding-right: 0;
-    padding-left: 40px;
+    padding-left: 50px;
   }
   
-  /* Numbered Badge Center Line Alignment */
   .timeline-icon {
     position: absolute;
     width: 40px;
@@ -171,25 +167,33 @@ st.markdown("""
     font-weight: 700;
     font-size: 14px;
     color: #0f0f0f;
-    transition: background-color 0.4s, border-color 0.4s;
   }
-  
-  /* Native Scroll Animations via View Timelines */
+
+  /* Linking animations to browser viewport scroll tracking */
   @supports (animation-timeline: view()) {
+    /* Main container animates the line fill based on container scroll depth */
+    .timeline-container {
+      view-timeline-name: --timeline;
+    }
+    .timeline-container::after {
+      animation: drawLine linear both;
+      animation-timeline: --timeline;
+      animation-range: entry 20% exit 80%;
+    }
+    /* Cards and badges animate into view as they enter the screen */
     .timeline-block {
-      animation: fadeUp both;
+      animation: fadeUp ease-out both;
       animation-timeline: view();
       animation-range: entry 5% cover 30%;
     }
-    /* Dynamic timeline active lighting highlight */
-    .timeline-block:hover .timeline-icon {
-      border-color: #00c48c;
-      background: #f0fff8;
-      box-shadow: 0 0 0 6px rgba(0,196,140,.12);
+    .timeline-icon {
+      animation: activeBadge linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 28%;
     }
   }
 
-  /* Roadmap Cards Layout styling */
+  /* Card Core Visuals */
   .plx-step-card {
     background: #fff;
     border: 1.5px solid #e4e4e4;
@@ -215,30 +219,11 @@ st.markdown("""
     border-radius: 100px;
     margin-bottom: 12px;
   }
-  .plx-step-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #0a0a0a;
-    margin-bottom: 8px;
-    letter-spacing: -.3px;
-  }
-  .plx-step-desc {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.6;
-  }
-  .plx-step-detail {
-    margin-top: 14px;
-    font-size: 13px;
-    color: #888;
-    line-height: 1.5;
-  }
-  .plx-step-detail strong {
-    color: #0a0a0a;
-    font-weight: 600;
-  }
+  .plx-step-title { font-size: 18px; font-weight: 700; color: #0a0a0a; margin-bottom: 8px; letter-spacing: -.3px; }
+  .plx-step-desc { font-size: 14px; color: #666; line-height: 1.6; }
+  .plx-step-detail { margin-top: 14px; font-size: 13px; color: #888; line-height: 1.5; }
+  .plx-step-detail strong { color: #0a0a0a; font-weight: 600; }
 
-  /* Notification Boxes */
   .plx-notif {
     display: flex;
     align-items: flex-start;
@@ -249,130 +234,98 @@ st.markdown("""
     padding: 10px 12px;
     margin-top: 14px;
   }
-  .plx-notif-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #00c48c;
-    margin-top: 4px;
-    flex-shrink: 0;
-  }
-  .plx-notif-text {
-    font-size: 12px;
-    color: #555;
-    line-height: 1.4;
-  }
+  .plx-notif-dot { width: 8px; height: 8px; border-radius: 50%; background: #00c48c; margin-top: 4px; flex-shrink: 0; }
+  .plx-notif-text { font-size: 12px; color: #555; line-height: 1.4; }
   .plx-notif-text strong { color: #000; }
 
-  /* VIP Highlight Premium Callout Card */
-  .plx-money-card {
-    background: #0a0a0a;
-    border: 1.5px solid #00c48c;
-    position: relative;
-    overflow: hidden;
-  }
+  /* Premium Callout Card Accents */
+  .plx-money-card { background: #0a0a0a; border: 1.5px solid #00c48c; position: relative; overflow: hidden; }
   .plx-money-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
+    content: ''; position: absolute; inset: 0;
     background: radial-gradient(ellipse at top left, rgba(0,196,140,.2) 0%, transparent 60%);
   }
   .plx-money-card .plx-step-title { color: #fff; }
   .plx-money-card .plx-step-desc { color: #888; }
   .plx-money-card .plx-step-detail { color: #666; }
   .plx-money-card .plx-step-detail strong { color: #00c48c; }
-  .plx-money-amount {
-    font-size: 36px;
-    font-weight: 700;
-    color: #00c48c;
-    letter-spacing: -1px;
-    margin-top: 12px;
-    display: block;
-  }
+  .plx-money-amount { font-size: 36px; font-weight: 700; color: #00c48c; letter-spacing: -1px; margin-top: 12px; display: block; }
   .plx-money-sub { font-size: 12px; color: #555; margin-top: 2px; }
 
-  /* Calculator Dashboard Display Metrics */
+  /* Metrics Display Grid Modules */
   .metric-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
   .metric-card {
-    flex: 1;
-    min-width: 140px;
-    background: #fff;
-    border: 1px solid #e8e6e0;
-    border-radius: 12px;
-    padding: 20px;
+    flex: 1; min-width: 140px; background: #fff; border: 1px solid #e8e6e0; border-radius: 12px; padding: 20px;
     transition: transform 0.2s ease;
   }
   .metric-card:hover { transform: translateY(-3px); }
   .metric-card .m-label { font-size: 12px; color: #888; margin-bottom: 6px; }
   .metric-card .m-value { font-size: 28px; font-weight: 700; color: #0f0f0f; }
   .metric-card .m-sub { font-size: 12px; color: #aaa; margin-top: 4px; }
-  .metric-card.highlight { 
-    background: #0f0f0f; 
-    border-color: #0f0f0f; 
-    animation: pulseHighlight 2s infinite; 
-  }
+  .metric-card.highlight { background: #0f0f0f; border-color: #0f0f0f; animation: pulseHighlight 2s infinite; }
   .metric-card.highlight .m-label { color: #888; }
   .metric-card.highlight .m-value { color: #00c48c; }
   .metric-card.highlight .m-sub { color: #666; }
 
-  /* Table Matrix Grid Columns */
+  /* Comparison Data Layout styling */
   .compare-table { background: #fff; border: 1px solid #e8e6e0; border-radius: 16px; overflow: hidden; }
-  .compare-header {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    background: #0f0f0f;
-    color: #fff;
-    padding: 14px 24px;
-    font-size: 13px;
-    font-weight: 600;
-  }
-  .compare-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    padding: 14px 24px;
-    border-bottom: 1px solid #f0eeea;
-    font-size: 14px;
-    align-items: center;
-  }
+  .compare-header { display: grid; grid-template-columns: 2fr 1fr 1fr; background: #0f0f0f; color: #fff; padding: 14px 24px; font-size: 13px; font-weight: 600; }
+  .compare-row { display: grid; grid-template-columns: 2fr 1fr 1fr; padding: 14px 24px; border-bottom: 1px solid #f0eeea; font-size: 14px; align-items: center; }
   .compare-row:last-child { border-bottom: none; }
   .compare-row .label { color: #555; }
   .compare-row .bad { color: #e24b4a; font-weight: 500; }
   .compare-row .good { color: #16a34a; font-weight: 500; }
 
-  .insight-card {
-    background: #fff;
-    border: 1px solid #e8e6e0;
-    border-left: 3px solid #00c48c;
-    border-radius: 0 12px 12px 0;
-    padding: 16px 20px;
-    margin-bottom: 12px;
-    font-size: 14px;
-    color: #444;
-    line-height: 1.6;
-  }
+  .insight-card { background: #fff; border: 1px solid #e8e6e0; border-left: 3px solid #00c48c; border-radius: 0 12px 12px 0; padding: 16px 20px; margin-bottom: 12px; font-size: 14px; color: #444; line-height: 1.6; }
   .insight-card b { color: #0f0f0f; font-weight: 600; }
 
-  .cta-section {
-    background: #0f0f0f;
-    color: #fff;
-    padding: 80px 60px;
-    text-align: center;
-    border-radius: 24px;
-    margin-bottom: 40px;
-  }
+  .cta-section { background: #0f0f0f; color: #fff; padding: 80px 60px; text-align: center; border-radius: 24px; margin-bottom: 40px; }
   .cta-section h2 { font-size: 40px; font-weight: 700; margin-bottom: 16px; letter-spacing: -.5px; }
   .cta-section p { font-size: 18px; color: #888; margin-bottom: 40px; }
-
   .divider { height: 1px; background: #e8e6e0; margin: 40px 0px; }
 
-  /* ── MOBILE BREAKPOINT COMPRESSION REPAIR ── */
+  /* ── MOBILE ADAPTIVE SCROLL ENGINE FIX ── */
   @media (max-width: 768px) {
-    .timeline-container::after { left: 20px; }
-    .timeline-block { justify-content: flex-start !important; }
-    .timeline-pointer { width: 100% !important; padding-left: 50px !important; padding-right: 0 !important; }
-    .timeline-icon { left: 20px !important; margin-left: -20px !important; }
+    /* 1. Turn off desktop center line calculations */
+    .timeline-container::before { left: 20px; margin-left: 0; }
+    .timeline-container::after { display: none; } 
+
+    /* 2. Create a fully independent tracking track for mobile left-aligned viewports */
+    .timeline-container {
+      border-left: 2px solid #e4e4e4;
+      padding-left: 24px;
+      margin-left: 10px;
+    }
+    
+    .timeline-block { 
+      justify-content: flex-start !important; 
+      margin-bottom: 35px;
+    }
+    .timeline-pointer { 
+      width: 100% !important; 
+      padding-left: 20px !important; 
+      padding-right: 0 !important; 
+    }
+    /* Re-anchor numbers directly onto the new left timeline edge */
+    .timeline-icon { 
+      left: -26px !important; 
+      margin-left: 0 !important; 
+      top: 16px;
+    }
+
+    @supports (animation-timeline: view()) {
+      .timeline-block {
+        animation: fadeUp ease-out both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 40%;
+      }
+      /* Trigger intense card tracking borders as thumb slides over it on mobile screens */
+      .timeline-block:has(~ .timeline-block) .plx-step-card {
+        border-color: #00c48c;
+      }
+    }
   }
 
-  /* Main frame normalization overrides */
+  /* Normalization adjustments */
   #MainMenu { visibility: hidden; }
   footer { visibility: hidden; }
   header { visibility: hidden; }
@@ -389,18 +342,19 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ── PREMIUM TIMELINE DISPLAY ──────────────────────────────────────────────────
+# ── INTERACTIVE TRAVELING TIMELINE ROADMAP ───────────────────────────────────
 st.markdown('<div class="section">', unsafe_allow_html=True)
 
 st.markdown("""
 <div class="section-label">🗺 Your path to clients</div>
 <div class="section-title">From <em>zero</em> to paid. In 6 steps.</div>
-<div class="section-sub">Here's exactly how Platinux turns a business owner's post into money in your account — and why responding first is everything.</div>
+<div class="section-sub">Scroll down the page to watch how Platinux intercepts projects and streams revenue directly to your workflow dashboard.</div>
 """, unsafe_allow_html=True)
 
 st.markdown("""
 <div class="timeline-container">
 
+  <!-- Step 1 -->
   <div class="timeline-block">
     <div class="timeline-icon">1</div>
     <div class="timeline-pointer">
@@ -416,6 +370,7 @@ st.markdown("""
     </div>
   </div>
 
+  <!-- Step 2 -->
   <div class="timeline-block">
     <div class="timeline-icon">2</div>
     <div class="timeline-pointer">
@@ -428,6 +383,7 @@ st.markdown("""
     </div>
   </div>
 
+  <!-- Step 3 -->
   <div class="timeline-block">
     <div class="timeline-icon">3</div>
     <div class="timeline-pointer">
@@ -443,6 +399,7 @@ st.markdown("""
     </div>
   </div>
 
+  <!-- Step 4 -->
   <div class="timeline-block">
     <div class="timeline-icon">4</div>
     <div class="timeline-pointer">
@@ -455,6 +412,7 @@ st.markdown("""
     </div>
   </div>
 
+  <!-- Step 5 -->
   <div class="timeline-block">
     <div class="timeline-icon">5</div>
     <div class="timeline-pointer">
@@ -467,8 +425,9 @@ st.markdown("""
     </div>
   </div>
 
+  <!-- Step 6 -->
   <div class="timeline-block">
-    <div class="timeline-icon" style="border-color:#00c48c; background:#0f0f0f; color:#fff;">6</div>
+    <div class="timeline-icon">6</div>
     <div class="timeline-pointer">
       <div class="plx-step-card plx-money-card">
         <div class="plx-step-tag" style="background:rgba(0,196,140,.15); color:#00c48c;">💰 Step 6</div>
