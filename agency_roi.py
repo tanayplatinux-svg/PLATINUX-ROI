@@ -382,6 +382,14 @@ st.markdown("""
 
 # ── HERO ──────────────────────────────────────────────────────────────────────
 st.markdown("""
+<style>
+h1 a, h2 a, h3 a {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
 <div class="hero animate-in">
   
   <h1 class="animate-up delay-1">Your next client is already<br>looking for someone like <span>you.</span></h1>
