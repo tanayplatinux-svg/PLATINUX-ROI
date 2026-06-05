@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Platinux Agency - ROI Calculator</title>
+    <!-- Loading Tailwind for rapid high-end CSS scaling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Loading Chart.js for data visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Premium Google Font integration -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -15,7 +19,7 @@
             overflow-x: hidden;
         }
         
-        /* Custom Animations */
+        /* Modern entry point animations */
         @keyframes fadeUp {
             0% { opacity: 0; transform: translateY(30px); }
             100% { opacity: 1; transform: translateY(0); }
@@ -28,6 +32,7 @@
         .delay-200 { animation-delay: 200ms; }
         .delay-300 { animation-delay: 300ms; }
 
+        /* Scroll reveal effects */
         .reveal-on-scroll {
             opacity: 0;
             transform: translateY(30px);
@@ -38,7 +43,7 @@
             transform: translateY(0);
         }
 
-        /* Pulse Highlight */
+        /* Pulsing dashboard card styling */
         @keyframes pulseHighlight {
             0% { box-shadow: 0 0 0 0 rgba(0, 196, 140, 0.3); }
             70% { box-shadow: 0 0 0 10px rgba(0, 196, 140, 0); }
@@ -48,7 +53,7 @@
             animation: pulseHighlight 2.5s infinite;
         }
 
-        /* Custom Input Styling for Sliders */
+        /* Standard responsive input ranges styling */
         input[type=range] {
             -webkit-appearance: none;
             width: 100%;
@@ -117,10 +122,10 @@
 
         <!-- Timeline Container -->
         <div class="relative wrap overflow-hidden p-2 md:p-10 h-full">
-            <!-- Center Line (Desktop) / Left Line (Mobile) -->
+            <!-- Vertical Center Line (Desktop) / Left Line (Mobile) -->
             <div class="absolute border-opacity-100 border-gray-300 h-full border-2" style="left: 24px; md:left: 50%; transform: translateX(-50%);"></div>
 
-            <!-- Step 1: Left -->
+            <!-- Step 1: Deep Web Scanning -->
             <div class="mb-8 flex justify-between items-center w-full reveal-on-scroll">
                 <div class="order-1 w-[40px] md:w-5/12"></div>
                 <div class="z-20 flex items-center order-1 bg-white border-2 border-gray-200 w-12 h-12 rounded-full absolute" style="left: 24px; md:left: 50%; transform: translateX(-50%);">
@@ -137,7 +142,7 @@
                 </div>
             </div>
 
-            <!-- Step 2: Right -->
+            <!-- Step 2: Intelligent Filtering -->
             <div class="mb-8 flex justify-between items-center w-full flex-row md:flex-row-reverse reveal-on-scroll">
                 <div class="order-1 w-[40px] md:w-5/12"></div>
                 <div class="z-20 flex items-center order-1 bg-white border-2 border-gray-200 w-12 h-12 rounded-full absolute" style="left: 24px; md:left: 50%; transform: translateX(-50%);">
@@ -151,7 +156,7 @@
                 </div>
             </div>
 
-            <!-- Step 3: Left -->
+            <!-- Step 3: Audit Reports -->
             <div class="mb-8 flex justify-between items-center w-full reveal-on-scroll">
                 <div class="order-1 w-[40px] md:w-5/12"></div>
                 <div class="z-20 flex items-center order-1 bg-white border-2 border-gray-200 w-12 h-12 rounded-full absolute" style="left: 24px; md:left: 50%; transform: translateX(-50%);">
@@ -165,7 +170,7 @@
                 </div>
             </div>
 
-            <!-- Step 4: Right (Highlight) -->
+            <!-- Step 4: Acquisition -->
             <div class="mb-8 flex justify-between items-center w-full flex-row md:flex-row-reverse reveal-on-scroll">
                 <div class="order-1 w-[40px] md:w-5/12"></div>
                 <div class="z-20 flex items-center order-1 bg-dark border-2 border-brand w-12 h-12 rounded-full absolute shadow-[0_0_15px_rgba(0,196,140,0.5)]" style="left: 24px; md:left: 50%; transform: translateX(-50%);">
@@ -195,7 +200,7 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <!-- Left: Inputs -->
+            <!-- Left Panel: Inputs -->
             <div class="bg-white p-8 rounded-3xl border border-border shadow-sm">
                 <h3 class="font-bold text-xl mb-6 border-b border-border pb-4">Your Agency Profile</h3>
                 
@@ -249,7 +254,7 @@
                 </div>
             </div>
 
-            <!-- Right: Outputs -->
+            <!-- Right Panel: Dynamic Outputs -->
             <div class="flex flex-col justify-center">
                 <h3 class="font-bold text-xl mb-6">Your Monthly Results</h3>
                 
@@ -309,7 +314,7 @@
                     <canvas id="pieChart"></canvas>
                 </div>
                 <div id="pie-center-text" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center mt-4">
-                    <!-- Injected via JS -->
+                    <!-- Dynamic Center Text injected here -->
                 </div>
             </div>
         </div>
@@ -450,7 +455,7 @@
             const planCost = isINR ? 17999 : 199;
             const sdrCost = isINR ? 150000 : 2000;
             
-            // Update Slider Ranges based on Currency
+            // Update Slider Ranges based on Currency Choice
             const dealSlider = document.getElementById('deal-slider');
             if (isINR && dealSlider.max !== "2000000") {
                 dealSlider.min = 50000; dealSlider.max = 2000000; dealSlider.step = 50000; dealSlider.value = 400000;
@@ -468,7 +473,7 @@
             document.getElementById('close-val').innerText = closeRate + '%';
             document.getElementById('margin-val').innerText = margin + '%';
 
-            // Math
+            // Calculations
             const clientsPerMonth = leadsPerMonth * (closeRate / 100);
             const monthlyRevenue = clientsPerMonth * avgProject;
             const monthlyOverhead = monthlyRevenue * (1 - (margin / 100));
@@ -477,7 +482,7 @@
             const roiX = planCost > 0 ? Math.round((monthlyProfit / planCost) * 100) : 0;
             const annualProfit = netGain * 12;
 
-            // Update Timeline Highlight Amount
+            // Update Timeline Highlight Amount dynamically
             document.getElementById('timeline-money').innerText = '+' + (isINR ? formatMoney(400000, 'INR') : formatMoney(8000, 'USD'));
             document.getElementById('timeline-sub').innerHTML = `Platinux cost: <strong>${symbol}${planCost.toLocaleString()}/mo</strong> &nbsp;·&nbsp; Your ROI: <strong>Massive</strong>`;
 
@@ -500,7 +505,7 @@
             document.getElementById('compare-sdr-cost').innerText = formatMoney(sdrCost * 12, currency);
             document.getElementById('compare-plat-cost').innerText = formatMoney(planCost * 12, currency) + " flat";
 
-            // Update Pricing Block
+            // Update Pricing Block values
             if (isINR) {
                 document.getElementById('price-pro').innerText = "₹1,999";
                 document.getElementById('price-agency').innerText = "₹17,999";
@@ -513,7 +518,7 @@
                 document.getElementById('price-scale').innerText = "$499+";
             }
 
-            // Update Charts
+            // Update Line & Pie charts
             updateCharts(monthlyProfit, planCost, sdrCost, monthlyOverhead, currency, margin);
         }
 
@@ -522,7 +527,7 @@
             const sdrData = Array.from({length: 12}, (_, i) => Math.max(0, (monthlyProfit * (1 + 0.02*i)) - sdrCost));
             const platData = Array.from({length: 12}, (_, i) => Math.max(0, (monthlyProfit * (1 + 0.05*i)) - planCost));
 
-            // Line Chart
+            // Line Chart rendering block
             const ctxLine = document.getElementById('projectionChart').getContext('2d');
             if (lineChartInstance) {
                 lineChartInstance.data.datasets[0].data = sdrData;
@@ -572,7 +577,7 @@
                 });
             }
 
-            // Pie Chart
+            // Doughnut Pie Chart rendering block
             const trueProfit = Math.max(0, monthlyProfit - planCost);
             const pieData = [trueProfit, monthlyOverhead, planCost];
             const ctxPie = document.getElementById('pieChart').getContext('2d');
@@ -605,7 +610,7 @@
                 });
             }
 
-            // Update text in the middle of doughnut chart
+            // Update central doughnut KPI text elements
             document.getElementById('pie-center-text').innerHTML = `
                 <div class="text-xl font-bold text-dark leading-none">${formatMoney(trueProfit, currency)}</div>
                 <div class="text-[10px] text-gray-500 font-medium uppercase mt-1">True Profit</div>
