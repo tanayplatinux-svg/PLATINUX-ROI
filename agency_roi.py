@@ -38,8 +38,12 @@ st.markdown("""
     color: #0f0f0f;
   }
   .main { background: #ffffff; }
-
-
+    
+  .block-container {
+    padding-left: 5% !important;
+    padding-right: 5% !important;
+    max-width: 90% !important;
+  }
 
   @keyframes fadeUp {
     0%  { opacity: 0; transform: translateY(24px); }
@@ -66,10 +70,7 @@ st.markdown("""
     color: #0f0f0f;
     padding: 72px 40px 64px;
     text-align: center;
-    border-radius: 24px;
-    margin-top: 24px;
-    border: 1.5px solid #e4e4e4;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+    
   }
   .hero-badge {
     display: inline-flex;
