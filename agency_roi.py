@@ -164,7 +164,7 @@
                 </div>
                 <div class="order-1 bg-white rounded-2xl border border-border shadow-sm p-6 md:p-8 w-[calc(100%-60px)] md:w-5/12 ml-auto md:ml-0 transition-transform hover:-translate-y-1 hover:border-brand hover:shadow-lg hover:shadow-brand/10">
                     <span class="inline-flex items-center text-xs font-bold uppercase tracking-wide px-3 py-1 rounded-full bg-blue-50 text-blue-700 mb-4">📄 Auditing</span>
-                    <h3 class="font-bold text-xl mb-2 text-dark">Automated Audit Reports</h3>
+                    <h3 class="font-bold text-xl mb-2 text-dark">Automated Website Audits</h3>
                     <p class="text-gray-600 text-sm leading-relaxed mb-4">For each of the 100 narrowed leads, Platinux instantly generates a bespoke, stunning Website Audit Report highlighting real conversion friction. Direct to your outreach.</p>
                     <p class="text-xs text-gray-500 border-t border-border pt-3">Agencies using custom audits in their outreach experience a **3× increase** in response rates.</p>
                 </div>
