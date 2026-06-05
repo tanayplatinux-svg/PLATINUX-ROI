@@ -339,7 +339,7 @@ st.markdown("""
     font-weight: 700;
     color: #00c48c;
     white-space: nowrap;
-  }
+  }        
 
   /* ── CTA / FOOTER (white bg, black text) ── */
   .cta-section {
@@ -385,7 +385,7 @@ st.markdown("""
 <div class="hero animate-in">
   
   <h1 class="animate-up delay-1">Your next client is already<br>looking for someone like <span>you.</span></h1>
-  <p class="animate-up delay-2">Platinux finds businesses in your niche that need development, design, or a full site rebuild — and gets you in front of them before anyone else does.</p>
+  <p class="animate-up delay-2">Platinux finds businesses in your niche that need development, design, or a full site rebuild and gets you in front of them before anyone else does.</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -394,7 +394,7 @@ timeline_template = """
 <div class="section">
 <div class="section-label">How it works</div>
 <div class="section-title">From a cold list to a <em>paying client.</em></div>
-<div class="section-sub">Here is the exact process Platinux uses to find businesses that need your help — and put them right in your inbox, ready to hear from you.</div>
+<div class="section-sub">Here is the exact process Platinux uses to find businesses that need your help and put them right in your inbox, ready to hear from you.</div>
 
 <div class="timeline-container">
 
@@ -404,7 +404,7 @@ timeline_template = """
       <div class="plx-step-card">
         <div class="plx-step-tag" style="background:#e6fcf5; color:#087f5b;">🔍 Finding Leads</div>
         <div class="plx-step-title">We scan for businesses in your space</div>
-        <div class="plx-step-desc">Tell us what kind of work you do — web dev, design, SaaS builds, whatever — and Platinux scans thousands of live websites in that space every day. We look for signs that a business is overdue for a site refresh: broken layouts, slow pages, outdated design, poor mobile experience.</div>
+        <div class="plx-step-desc">Tell us what kind of work you do: web dev, design, SaaS builds, whatever.... and Platinux scans thousands of live websites in that space every day. We look for signs that a business is overdue for a site refresh: broken layouts, slow pages, outdated design, poor mobile experience.</div>
         <div class="plx-notif">
           <div class="plx-notif-dot"></div>
           <div class="plx-notif-text"><strong>Example:</strong> 12,450 local B2B sites scanned in your niche → 1,000 flagged as strong prospects.</div>
@@ -418,8 +418,8 @@ timeline_template = """
     <div class="timeline-pointer">
       <div class="plx-step-card">
         <div class="plx-step-tag" style="background:#fff9db; color:#f08c00;">🎯 Narrowing Down</div>
-        <div class="plx-step-title">We cut the noise — you get the best 100</div>
-        <div class="plx-step-desc">Not every flagged site is worth your time. So we rank them by how likely they are to actually convert — based on site quality signals, business size, and niche fit. You end up with a tight list of 100 real prospects each month, not a messy spreadsheet of thousands to sort through yourself.</div>
+        <div class="plx-step-title">We cut the noise; get the best 100</div>
+        <div class="plx-step-desc">Not every flagged site is worth your time. So we rank them by how likely they are to actually convert based on site quality signals, business size, and niche fit. You end up with a tight list of 100 real prospects each month, not a messy spreadsheet of thousands to sort through yourself.</div>
         <div class="plx-step-detail">This means your sales team spends time talking to people, not hunting for people to talk to.</div>
       </div>
     </div>
@@ -431,7 +431,7 @@ timeline_template = """
       <div class="plx-step-card">
         <div class="plx-step-tag" style="background:#e7f5ff; color:#1c7ed6;">📄 Personalised Audit Report</div>
         <div class="plx-step-title">Each lead gets their own audit — automatically</div>
-        <div class="plx-step-desc">For every lead on your list, Platinux builds a custom audit report showing exactly what is wrong with their site. You send it as part of your outreach — and instead of a cold pitch, you are leading with something genuinely useful.</div>
+        <div class="plx-step-desc">For every lead on your list, Platinux builds a custom audit report showing exactly what is wrong with their site. You send it as part of your outreach and instead of a cold pitch, you are leading with something genuinely useful.</div>
         <div class="plx-step-detail">Agencies that send personalised audits see 3× more replies than those sending generic outreach messages.</div>
       </div>
     </div>
@@ -487,7 +487,7 @@ with calc_left:
     if is_inr:
         plan_options = {"Starter — ₹999/mo": 999, "Agency — ₹17,999/mo": 17999, "Scale — ₹39,999/mo": 39999}
     else:
-        plan_options = {"Starter — $49/mo": 49, "Agency — $199/mo": 199, "Scale — $499/mo": 499}
+        plan_options = {"Starter — $89/mo": 89, "Agency — $399/mo": 399, "Scale — $999/mo": 999}
 
     selected_plan_label = st.selectbox("Platinux Plan", list(plan_options.keys()))
     plan_cost = plan_options[selected_plan_label]
