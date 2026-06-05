@@ -438,7 +438,7 @@ timeline_template = """
     <div class="timeline-pointer">
       <div class="plx-step-card">
         <div class="plx-step-tag" style="background:#e7f5ff; color:#1c7ed6;">📄 Personalised Audit Report</div>
-        <div class="plx-step-title">Each lead gets their own audit — automatically</div>
+        <div class="plx-step-title">Each lead gets their own audit    automatically</div>
         <div class="plx-step-desc">For every lead on your list, Platinux builds a custom audit report showing exactly what is wrong with their site. You send it as part of your outreach and instead of a cold pitch, you are leading with something genuinely useful.</div>
         <div class="plx-step-detail">Agencies that send personalised audits see 3× more replies than those sending generic outreach messages.</div>
       </div>
@@ -493,7 +493,7 @@ with calc_left:
 
     # Pricing parameter shown here inside the ROI section
     if is_inr:
-        plan_options = {"Starter — ₹999/mo": 999, "Agency — ₹17,999/mo": 17999, "Scale — ₹39,999/mo": 39999}
+        plan_options = {"Starter — ₹2499/mo": 2499, "Agency — ₹9,999/mo": 9999, "Scale — ₹39,999/mo": 39999}
     else:
         plan_options = {"Starter — $89/mo": 89, "Agency — $399/mo": 399, "Scale — $999/mo": 999}
 
@@ -535,7 +535,7 @@ monthly_revenue   = clients_per_month * avg_project
 monthly_overhead  = monthly_revenue * (1 - (agency_margin / 100))
 monthly_profit    = monthly_revenue - monthly_overhead
 net_gain          = monthly_profit - plan_cost
-roi_x             = round((monthly_profit / plan_cost) * 100) if plan_cost > 0 else 0
+roi_x             = round((monthly_profit / plan_cost)) if plan_cost > 0 else 0
 annual_profit     = net_gain * 12
 
 def fmt(n):
@@ -555,7 +555,7 @@ with calc_right:
     <div class="metric-row">
       <div class="metric-card highlight">
         <div class="m-label">Agency ROI</div>
-        <div class="m-value">{roi_x:,}%</div>
+        <div class="m-value">{roi_x:,}x</div>
         <div class="m-sub">Return on {sym}{plan_cost:,}/mo</div>
       </div>
       <div class="metric-card">
