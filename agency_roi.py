@@ -383,7 +383,7 @@ st.markdown("""
 # ── HERO ──────────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="hero animate-in">
-  <div class="hero-badge animate-up delay-1">⚡ platinux.net/agency — ROI Calculator</div>
+  
   <h1 class="animate-up delay-1">Your next client is already<br>looking for someone like <span>you.</span></h1>
   <p class="animate-up delay-2">Platinux finds businesses in your niche that need development, design, or a full site rebuild — and gets you in front of them before anyone else does.</p>
 </div>
