@@ -9,7 +9,28 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# We use a standard triple-quoted string without f-prefix to prevent curly brace SyntaxErrors
+# Initialize session states for seamless top-to-bottom calculation updates on widget interaction
+if "currency" not in st.session_state:
+    st.session_state.currency = "USD ($)"
+
+if "prev_currency" not in st.session_state:
+    st.session_state.prev_currency = st.session_state.currency
+
+# If the user switches currency, reset the deal size to sensible defaults instantly
+if st.session_state.currency != st.session_state.prev_currency:
+    if st.session_state.currency == "INR (₹)":
+        st.session_state.avg_project = 400000
+    else:
+        st.session_state.avg_project = 8000
+    st.session_state.prev_currency = st.session_state.currency
+
+# Read responsive values dynamically
+is_inr = st.session_state.currency == "INR (₹)"
+sym = "₹" if is_inr else "$"
+plan_cost = 17999 if is_inr else 199
+sdr_cost = 150000 if is_inr else 2000
+
+# Custom styles block defined as static string to avoid Python f-string parser errors with curly braces
 st.markdown("""
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -372,7 +393,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# We use replace() systematically inside standard Python strings to avoid format/braces issues
 timeline_template = """
 <div class="section">
 <div class="section-label">🗺 Your path to clients</div>
@@ -434,7 +454,7 @@ timeline_template = """
         <div class="plx-step-tag" style="background:rgba(0,196,140,.15); color:#00c48c;">💰 ROI</div>
         <div class="plx-step-title">Project delivered. Money in.</div>
         <div class="plx-step-desc">You build, deliver, and get paid. No Upwork commissions eating 20% of your income. Just you, the client, and the full project value.</div>
-        <span class="plx-money-amount">+[SYM]3,200</span>
+        <span class="plx-money-amount">+[SYM][VAL_DEMO]</span>
         <div class="plx-step-detail" style="margin-top:16px">Platinux cost: <strong>[SYM][PLAN_COST]/mo</strong>&nbsp;&nbsp;·&nbsp;&nbsp;Your ROI: <strong>Massive</strong></div>
       </div>
     </div>
@@ -444,15 +464,11 @@ timeline_template = """
 </div>
 """
 
-currency_choice = st.selectbox("Currency Selection", ["USD ($)", "INR (₹)"], label_visibility="collapsed")
-is_inr = currency_choice == "INR (₹)"
-sym = "₹" if is_inr else "$"
-plan_cost = 17999 if is_inr else 199
-sdr_cost = 150000 if is_inr else 2000
+# Dynamic value substitution for the timeline demo card
+val_demo = "3,200" if not is_inr else "2,50,000"
 
-# Render the custom-rendered responsive HTML timeline
 st.markdown(
-    timeline_template.replace("[SYM]", sym).replace("[PLAN_COST]", f"{plan_cost:,}"), 
+    timeline_template.replace("[SYM]", sym).replace("[PLAN_COST]", f"{plan_cost:,}").replace("[VAL_DEMO]", val_demo), 
     unsafe_allow_html=True
 )
 
@@ -468,9 +484,17 @@ calc_col_left, calc_col_right = st.columns([1, 1], gap="large")
 with calc_col_left:
     st.markdown("### **Your Agency Profile**")
     
-    # 100 Leads Month Fixed Marker Indicator (no longer a slider)
+    # Currency widget is rendered exactly here in its rightful previous location!
+    currency_choice = st.selectbox(
+        "Currency Selection", 
+        ["USD ($)", "INR (₹)"], 
+        key="currency", 
+        label_visibility="visible"
+    )
+
+    # 100 Leads Month Fixed Marker Indicator (no longer a slider as requested)
     st.markdown(f"""
-    <div style="background-color: #ecfdf5; border: 1.5px solid rgba(0, 196, 140, 0.3); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+    <div style="background-color: #ecfdf5; border: 1.5px solid rgba(0, 196, 140, 0.3); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 16px; margin-top: 16px; margin-bottom: 24px;">
         <div style="background-color: #00c48c; color: white; font-weight: 700; font-size: 20px; width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">100</div>
         <div>
             <h4 style="margin: 0; font-size: 14px; font-weight: 700; color: #0f0f0f;">Hot Leads per Month</h4>
@@ -481,12 +505,12 @@ with calc_col_left:
 
     # Set up slider configurations dynamically based on currency choice
     if is_inr:
-        avg_project = st.slider("Average deal size (₹)", 50000, 2000000, 400000, step=50000)
+        avg_project = st.slider("Average deal size (₹)", 50000, 2000000, key="avg_project", step=50000)
     else:
-        avg_project = st.slider("Average deal size ($)", 2000, 50000, 8000, step=1000)
+        avg_project = st.slider("Average deal size ($)", 2000, 50000, key="avg_project", step=1000)
 
-    conversion_rate = st.slider("Lead Close Rate (%)", 1, 20, 3, step=1)
-    agency_margin = st.slider("Net Profit Margin (%)", 10, 80, 40, step=5)
+    conversion_rate = st.slider("Lead Close Rate (%)", 1, 20, 3, key="conversion_rate", step=1)
+    agency_margin = st.slider("Net Profit Margin (%)", 10, 80, 40, key="agency_margin", step=5)
 
 leads_per_month = 100
 clients_per_month = leads_per_month * (conversion_rate / 100)
