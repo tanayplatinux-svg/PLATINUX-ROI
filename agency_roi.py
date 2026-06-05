@@ -39,11 +39,7 @@ st.markdown("""
   }
   .main { background: #ffffff; }
 
-  .block-container {
-    padding-left: 5% !important;
-    padding-right: 5% !important;
-    max-width: 90% !important;
-  }
+
 
   @keyframes fadeUp {
     0%  { opacity: 0; transform: translateY(24px); }
